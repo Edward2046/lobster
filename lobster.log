@@ -8,3 +8,74 @@
 2026-05-28 16:58:36 [INFO]    财报日历:   每周一 08:00 → WxPusher
 2026-05-28 16:58:36 [INFO]    按 Ctrl+C 停止
 2026-05-28 16:58:36 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:09:32 [INFO] 🦞 Lobster 启动
+2026-05-28 19:09:32 [INFO] ⏰ 调度器启动
+2026-05-28 19:09:32 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:09:32 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:09:32 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:09:32 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:09:32 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 19:10:21 [INFO] 收到问题: 上海明天的天气怎么样
+2026-05-28 19:10:24 [INFO] Agent 初始化完成
+2026-05-28 19:10:24 [INFO] 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+2026-05-28 19:12:57 [INFO] 🦞 Lobster 启动
+2026-05-28 19:12:57 [INFO] ⏰ 调度器启动
+2026-05-28 19:12:57 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:12:57 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:12:57 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:12:57 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:13:41 [INFO] 🦞 Lobster 启动
+2026-05-28 19:13:41 [INFO] ⏰ 调度器启动
+2026-05-28 19:13:41 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:13:41 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:13:41 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:13:41 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:14:34 [INFO] 🦞 Lobster 启动
+2026-05-28 19:14:34 [INFO] ⏰ 调度器启动
+2026-05-28 19:14:34 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:14:34 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:14:34 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:14:34 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:14:34 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 19:14:48 [INFO] 收到问题: 上海明天的天气怎么样
+2026-05-28 19:14:50 [INFO] Agent 初始化完成
+2026-05-28 19:14:50 [INFO] 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+2026-05-28 19:16:22 [INFO] 收到问题: hi
+2026-05-28 19:16:22 [INFO] 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+2026-05-28 19:20:00 [INFO] 🦞 Lobster 启动
+2026-05-28 19:20:00 [INFO] ⏰ 调度器启动
+2026-05-28 19:20:00 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:20:00 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:20:00 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:20:00 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:20:00 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 19:20:11 [INFO] 收到问题: 上海明天的天气怎么样
+2026-05-28 19:20:13 [INFO] Agent 初始化完成
+2026-05-28 19:20:13 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 19:20:13 [ERROR] Agent 执行出错: Error in generating model output:
+litellm.ServiceUnavailableError: ServiceUnavailableError: DeepseekException - {"error":{"message":"Service is too busy. We advise users to temporarily switch to alternative LLM API service providers.","type":"service_unavailable_error","param":null,"code":"service_unavailable_error"}}
+2026-05-28 19:20:13 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 19:22:32 [INFO] 🦞 Lobster 启动
+2026-05-28 19:22:32 [INFO] ⏰ 调度器启动
+2026-05-28 19:22:32 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 19:22:32 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 19:22:32 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 19:22:32 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 19:22:32 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 19:22:40 [INFO] 收到问题: 上海明天的天气怎么样
+2026-05-28 19:22:42 [INFO] Agent 初始化完成
+2026-05-28 19:22:43 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 19:22:43 [ERROR] Agent 执行出错: Error in generating model output:
+litellm.ServiceUnavailableError: ServiceUnavailableError: DeepseekException - {"error":{"message":"Service is too busy. We advise users to temporarily switch to alternative LLM API service providers.","type":"service_unavailable_error","param":null,"code":"service_unavailable_error"}}
+2026-05-28 19:22:43 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 19:27:02 [INFO] 收到问题: 上海明天的天气怎么样
+2026-05-28 19:27:02 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 19:27:32 [ERROR] Agent 执行出错: Error in generating model output:
+litellm.Timeout: Timeout Error: DeepseekException - litellm.Timeout: Connection timed out after 30.0 seconds.
+2026-05-28 19:27:32 [INFO] "POST /api/ask HTTP/1.1" 500 -
