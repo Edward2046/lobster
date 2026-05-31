@@ -4,11 +4,10 @@ import os
 
 from smolagents import tool
 
-
-def _create_tavily_client(api_key: str):
+try:
     from tavily import TavilyClient
-
-    return TavilyClient(api_key=api_key)
+except ImportError:
+    TavilyClient = None
 
 
 @tool
@@ -26,11 +25,12 @@ def search_web(query: str, max_results: int = 5) -> str:
     if not api_key:
         return "TAVILY_API_KEY is not set. Please set it in your environment."
 
-    try:
-        client = _create_tavily_client(api_key)
-        response = client.search(query, max_results=max_results)
-    except ImportError:
+    if TavilyClient is None:
         return "tavily-python is not installed. Please install dependencies first."
+
+    try:
+        client = TavilyClient(api_key=api_key)
+        response = client.search(query, max_results=max_results)
     except Exception as e:
         return f"Web search failed with Tavily: {e}"
 
