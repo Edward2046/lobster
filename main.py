@@ -22,9 +22,9 @@ import time
 import logging
 import argparse
 import threading
-from datetime import datetime
 
 from dotenv import load_dotenv
+import schedule
 load_dotenv()
 
 # ── 日志配置 ──────────────────────────────────────────────────────────────────
@@ -81,47 +81,19 @@ def run_earnings():
         log.error("❌ 财报日历异常: %s", e)
 
 
-# ── 调度器 ────────────────────────────────────────────────────────────────────
-
-_executed_today: set[str] = set()
-_last_date: str = ""
-
-
-def _check_and_run():
-    """每 30 秒检查一次，到点则执行对应任务。"""
-    global _executed_today, _last_date
-
-    now = datetime.now()
-    today = now.strftime("%Y-%m-%d")
-    hhmm  = now.strftime("%H:%M")
-    weekday = now.weekday()  # 0=周一
-
-    if today != _last_date:
-        _executed_today.clear()
-        _last_date = today
-        log.info("📅 新的一天：%s", today)
-
-    if weekday == 0 and hhmm == "08:00" and "earnings" not in _executed_today:
-        _executed_today.add("earnings")
-        run_earnings()
-
-    if hhmm == "09:00" and "finance" not in _executed_today:
-        _executed_today.add("finance")
-        run_finance()
-
-    if hhmm == "09:30" and "food" not in _executed_today:
-        _executed_today.add("food")
-        run_food()
-
-
 def run_scheduler():
-    """调度循环，每 30 秒检查一次时间（在独立线程中运行）。"""
+    """调度循环（在独立线程中运行）。"""
     log.info("⏰ 调度器启动")
     log.info("   财经简报:   每天 09:00 → WxPusher")
     log.info("   餐饮趋势:   每天 09:30 → 飞书")
     log.info("   财报日历:   每周一 08:00 → WxPusher")
+
+    schedule.every().day.at("09:00").do(run_finance)
+    schedule.every().day.at("09:30").do(run_food)
+    schedule.every().monday.at("08:00").do(run_earnings)
+
     while True:
-        _check_and_run()
+        schedule.run_pending()
         time.sleep(30)
 
 
@@ -149,8 +121,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.now:
-        tasks = list(_TASK_MAP.values()) if args.now == "all" else [_TASK_MAP.get(args.now)]
-        if not tasks[0]:
+        if args.now == "all":
+            tasks = list(_TASK_MAP.values())
+        elif args.now in _TASK_MAP:
+            tasks = [_TASK_MAP[args.now]]
+        else:
             print(f"未知任务 '{args.now}'，可选：finance / food / earnings / all")
             sys.exit(1)
         for task in tasks:
