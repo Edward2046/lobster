@@ -61,7 +61,7 @@ class DynamicTaskTests(unittest.TestCase):
         self.assertNotIn("demo-task", remaining_names)
 
     def test_run_task_injects_tool_globals(self):
-        create_task("tool-task", "every hour", "_result = 'ok'", "feishu", "tool globals")
+        create_task("tool-task", "every hour", "_result = search_web('latest ai news')", "feishu", "tool globals")
 
         with patch(
             "service.tools.code_executor_tool.execute_python_code",
