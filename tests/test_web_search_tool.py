@@ -1,5 +1,4 @@
 import os
-import types
 import unittest
 from unittest.mock import patch
 
@@ -14,12 +13,7 @@ class WebSearchToolTests(unittest.TestCase):
 
     def test_search_success_formats_markdown_results(self):
         class FakeTavilyClient:
-            def __init__(self, api_key):
-                self.api_key = api_key
-
             def search(self, query, max_results=5):
-                self.query = query
-                self.max_results = max_results
                 return {
                     "results": [
                         {"title": "Title 1", "url": "https://example.com/1", "content": "Summary 1"},
@@ -28,7 +22,7 @@ class WebSearchToolTests(unittest.TestCase):
                 }
 
         with patch.dict(os.environ, {"TAVILY_API_KEY": "test-key"}, clear=True):
-            with patch.dict("sys.modules", {"tavily": types.SimpleNamespace(TavilyClient=FakeTavilyClient)}):
+            with patch("service.tools.web_search_tool._create_tavily_client", return_value=FakeTavilyClient()):
                 result = search_web("ai news", max_results=2)
 
         self.assertIn("1. [Title 1](https://example.com/1)", result)
@@ -38,14 +32,11 @@ class WebSearchToolTests(unittest.TestCase):
 
     def test_search_failure_returns_helpful_message(self):
         class FakeTavilyClient:
-            def __init__(self, api_key):
-                self.api_key = api_key
-
             def search(self, query, max_results=5):
                 raise RuntimeError("network down")
 
         with patch.dict(os.environ, {"TAVILY_API_KEY": "test-key"}, clear=True):
-            with patch.dict("sys.modules", {"tavily": types.SimpleNamespace(TavilyClient=FakeTavilyClient)}):
+            with patch("service.tools.web_search_tool._create_tavily_client", return_value=FakeTavilyClient()):
                 result = search_web("ai news")
 
         self.assertIn("Web search failed with Tavily", result)
