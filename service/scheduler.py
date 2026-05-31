@@ -159,11 +159,31 @@ def run_task_by_name(name: str) -> str:
 
     from service.tools.code_executor_tool import execute_python_code
     from service.tools.notify_tool import send_notification, send_notification_result
+    from service.tools import (
+        calculate,
+        get_current_time,
+        get_earnings_calendar,
+        get_food_trends,
+        get_investing_news,
+        get_weather,
+        search_web,
+    )
+
+    tool_globals = {
+        "get_current_time": get_current_time,
+        "calculate": calculate,
+        "get_weather": get_weather,
+        "get_investing_news": get_investing_news,
+        "get_earnings_calendar": get_earnings_calendar,
+        "get_food_trends": get_food_trends,
+        "search_web": search_web,
+    }
 
     log.info("▶ 执行任务: %s", name)
     outcome = execute_python_code(
         task["code"],
         extra_globals={
+            **tool_globals,
             "send_notification": send_notification,
             "send_notification_result": send_notification_result,
             "notify_channel": task["notify_channel"],
