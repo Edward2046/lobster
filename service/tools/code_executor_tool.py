@@ -51,7 +51,7 @@ def execute_python_code(code: str, extra_globals: dict | None = None) -> dict:
 
     rendered = "\n\n".join(parts).strip()
     if success and not rendered:
-        rendered = "Code executed successfully."
+        rendered = "Code executed successfully with no output."
 
     return {
         "success": success,

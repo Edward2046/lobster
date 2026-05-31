@@ -73,7 +73,8 @@ if __name__ == "__main__":
         elif get_task_record(args.now):
             task_names = [args.now]
         else:
-            print(f"未知任务 '{args.now}'，可选：finance / food / earnings / all，或任意已创建任务名")
+            builtin_task_choices = " / ".join(_BUILTIN_TASKS)
+            print(f"未知任务 '{args.now}'，可选：{builtin_task_choices} / all，或任意已创建任务名")
             sys.exit(1)
         for task_name in task_names:
             print(run_task_by_name(task_name))

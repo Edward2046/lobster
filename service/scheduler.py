@@ -39,10 +39,10 @@ _BUILTIN_TASKS = [
 from service.cron.daily_finance import build_report
 
 title, content = build_report()
-notify_result = send_notification(notify_channel, title, content)
-if "failed" in notify_result.lower():
-    raise RuntimeError(notify_result)
-_result = f"{notify_result}\\n\\n{title}\\n\\n{content}"
+notification = send_notification_result(notify_channel, title, content)
+if not notification["ok"]:
+    raise RuntimeError(notification["message"])
+_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
 """.strip(),
     },
     {
@@ -54,10 +54,10 @@ _result = f"{notify_result}\\n\\n{title}\\n\\n{content}"
 from service.cron.daily_food_trends import build_report
 
 title, content = build_report()
-notify_result = send_notification(notify_channel, title, content)
-if "failed" in notify_result.lower():
-    raise RuntimeError(notify_result)
-_result = f"{notify_result}\\n\\n{title}\\n\\n{content}"
+notification = send_notification_result(notify_channel, title, content)
+if not notification["ok"]:
+    raise RuntimeError(notification["message"])
+_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
 """.strip(),
     },
     {
@@ -69,10 +69,10 @@ _result = f"{notify_result}\\n\\n{title}\\n\\n{content}"
 from service.cron.weekly_earnings import build_report
 
 title, content = build_report()
-notify_result = send_notification(notify_channel, title, content)
-if "failed" in notify_result.lower():
-    raise RuntimeError(notify_result)
-_result = f"{notify_result}\\n\\n{title}\\n\\n{content}"
+notification = send_notification_result(notify_channel, title, content)
+if not notification["ok"]:
+    raise RuntimeError(notification["message"])
+_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
 """.strip(),
     },
 ]
@@ -158,13 +158,14 @@ def run_task_by_name(name: str) -> str:
         raise ValueError(f"Task '{name}' not found.")
 
     from service.tools.code_executor_tool import execute_python_code
-    from service.tools.notify_tool import send_notification
+    from service.tools.notify_tool import send_notification, send_notification_result
 
     log.info("▶ 执行任务: %s", name)
     outcome = execute_python_code(
         task["code"],
         extra_globals={
             "send_notification": send_notification,
+            "send_notification_result": send_notification_result,
             "notify_channel": task["notify_channel"],
             "task_name": task["name"],
         },
