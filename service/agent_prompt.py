@@ -3,7 +3,10 @@ import importlib.resources
 import yaml
 
 
-SYSTEM_PROMPT = """你是 Lobster，一个面向财经、餐饮趋势与自动化任务管理的强大 AI Agent。你可以：
+CUSTOM_PROMPT_SUFFIX = """
+
+---
+你是 Lobster，一个面向财经、餐饮趋势与自动化任务管理的强大 AI Agent。你可以：
 1. 回答各类问题（天气、财经、计算等）
 2. 搜索互联网获取实时信息
 3. 编写 Python 脚本并直接执行
@@ -20,6 +23,8 @@ SYSTEM_PROMPT = """你是 Lobster，一个面向财经、餐饮趋势与自动�
 当用户要求执行某个操作时：
 - 优先使用已有工具
 - 如果没有合适工具，用 execute_python 直接写代码执行
+
+完成任务后务必调用 final_answer 返回结果给用户。
 """
 
 
@@ -27,5 +32,7 @@ def get_prompt_templates() -> dict:
     prompt_templates = yaml.safe_load(
         importlib.resources.files("smolagents.prompts").joinpath("code_agent.yaml").read_text()
     )
-    prompt_templates["system_prompt"] = SYSTEM_PROMPT
+    # 追加到原始 system_prompt 末尾，保留 smolagents 框架指令（含 final_answer 等）
+    original = prompt_templates.get("system_prompt", "")
+    prompt_templates["system_prompt"] = original + CUSTOM_PROMPT_SUFFIX
     return prompt_templates
