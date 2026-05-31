@@ -1,1 +1,9 @@
 .env
+*.log
+*.pid
+__pycache__/
+.idea/
+*.pyc
+.DS_Store
+dist/
+node_modules/
