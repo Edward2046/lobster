@@ -62,6 +62,7 @@
 ## Required environment variables
 
 - `DEEPSEEK_API_KEY`
+- `TAVILY_API_KEY`
 - `WXPUSHER_APP_TOKEN`
 - `WXPUSHER_UID`
 - `FEISHU_WEBHOOK`
