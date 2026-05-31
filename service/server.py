@@ -27,6 +27,7 @@ def get_agent():
         from service.tools import (
             get_current_time, calculate, get_weather,
             get_investing_news, get_earnings_calendar, get_food_trends,
+            get_scheduled_task_count,
         )
 
         model = LiteLLMModel(
@@ -37,7 +38,8 @@ def get_agent():
         )
         _agent = CodeAgent(
             tools=[get_current_time, calculate, get_weather,
-                   get_investing_news, get_earnings_calendar, get_food_trends],
+                   get_investing_news, get_earnings_calendar, get_food_trends,
+                   get_scheduled_task_count],
             model=model,
             max_steps=5,
             verbosity_level=0,

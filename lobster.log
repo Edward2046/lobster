@@ -79,3 +79,285 @@ LiteLLM completion() model= deepseek-reasoner; provider = deepseek
 2026-05-28 19:27:32 [ERROR] Agent 执行出错: Error in generating model output:
 litellm.Timeout: Timeout Error: DeepseekException - litellm.Timeout: Connection timed out after 30.0 seconds.
 2026-05-28 19:27:32 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 21:32:35 [INFO] 🦞 Lobster 启动
+2026-05-28 21:32:35 [INFO] ⏰ 调度器启动
+2026-05-28 21:32:35 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 21:32:35 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 21:32:35 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 21:32:35 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 21:32:35 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 21:32:55 [INFO] 收到问题: 上海明天的天气怎么样?
+2026-05-28 21:32:55 [ERROR] Agent 执行出错: No module named 'smolagents'
+2026-05-28 21:32:55 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 21:33:17 [INFO] 收到问题: 你好
+2026-05-28 21:33:17 [ERROR] Agent 执行出错: No module named 'smolagents'
+2026-05-28 21:33:17 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 21:35:01 [INFO] 🦞 Lobster 启动
+2026-05-28 21:35:01 [INFO] ⏰ 调度器启动
+2026-05-28 21:35:01 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 21:35:01 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 21:35:01 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 21:35:01 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 21:36:32 [INFO] 🦞 Lobster 启动
+2026-05-28 21:36:32 [INFO] ⏰ 调度器启动
+2026-05-28 21:36:32 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 21:36:32 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 21:36:32 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 21:36:32 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 21:36:32 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 21:36:49 [INFO] 收到问题: 你好
+2026-05-28 21:36:49 [ERROR] Agent 执行出错: Please install 'litellm' extra to use LiteLLMModel: `pip install 'smolagents[litellm]'`
+2026-05-28 21:36:49 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-28 21:50:55 [INFO] 🦞 Lobster 启动
+2026-05-28 21:50:55 [INFO] ⏰ 调度器启动
+2026-05-28 21:50:55 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 21:50:55 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 21:50:55 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 21:50:55 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 21:50:55 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 21:51:09 [INFO] 收到问题: 你好
+2026-05-28 21:51:12 [WARNING] litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 21:51:12 [WARNING] litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 21:51:13 [INFO] Agent 初始化完成
+2026-05-28 21:51:13 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:51:16 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:51:16 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:51:22 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:51:22 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 21:51:54 [INFO] 收到问题: 请查询下上海明天的天气
+2026-05-28 21:51:54 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:52:01 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:52:02 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:52:04 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:52:06 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:52:15 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:52:15 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:52:18 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:52:18 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 21:52:44 [INFO] 收到问题: 请查看下明天发财报的公司
+2026-05-28 21:52:44 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:52:50 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:52:54 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 21:54:39 [INFO] 收到问题: OK，请查询下最新的财经新闻
+2026-05-28 21:54:39 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:54:41 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:54:44 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 21:55:53 [INFO] 收到问题: 请检查我有几个定时任务？
+2026-05-28 21:55:53 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 21:56:02 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 21:56:02 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 22:03:20 [INFO] 🦞 Lobster 启动
+2026-05-28 22:03:20 [INFO] ⏰ 调度器启动
+2026-05-28 22:03:20 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 22:03:20 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 22:03:20 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 22:03:20 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 22:03:20 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 22:03:30 [INFO] 收到问题: 请检查我有几个定时任务？
+2026-05-28 22:03:34 [WARNING] litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 22:03:34 [WARNING] litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 22:03:34 [INFO] Agent 初始化完成
+2026-05-28 22:03:34 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:03:40 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:03:40 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:03:42 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:03:42 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 22:03:59 [INFO] 收到问题: 有这么多定时任务？列下
+2026-05-28 22:03:59 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:04:04 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:04:04 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 22:04:19 [INFO] 收到问题: 好吧
+2026-05-28 22:04:19 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:04:25 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:04:25 [INFO] "POST /api/ask HTTP/1.1" 200 -
+[2026-05-28 22:14:42] Starting backend...
+2026-05-28 22:14:42 [INFO] 🦞 Lobster 启动
+2026-05-28 22:14:42 [INFO] ⏰ 调度器启动
+2026-05-28 22:14:42 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 22:14:42 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 22:14:42 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 22:14:42 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 22:14:42 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 22:14:43 [INFO] "GET /health HTTP/1.1" 200 -
+2026-05-28 22:14:43 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-28 22:14:43] Backend started in background with PID 87935.
+[2026-05-28 22:14:43] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 200 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-05-28 22:14:46] Frontend started in background with PID 87948.
+[2026-05-28 22:14:46] Lobster is starting. Backend logs go to lobster.log; frontend output is appended there too.
+2026-05-28 22:14:47 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-28 22:20:03] Stopping Frontend (PID 87948)...
+[2026-05-28 22:20:04] Frontend stopped.
+[2026-05-28 22:20:04] Stopping Backend (PID 87935)...
+[2026-05-28 22:20:05] Backend stopped.
+[2026-05-28 22:24:04] Frontend is not managed by this script right now.
+[2026-05-28 22:24:04] Backend is not managed by this script right now.
+[2026-05-28 22:24:11] Starting backend...
+2026-05-28 22:24:11 [INFO] 🦞 Lobster 启动
+2026-05-28 22:24:11 [INFO] ⏰ 调度器启动
+2026-05-28 22:24:11 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 22:24:11 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 22:24:11 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 22:24:11 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 22:24:11 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 22:24:12 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-28 22:24:12] Backend started in background with PID 89047.
+[2026-05-28 22:24:12] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 204 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-05-28 22:24:13] Frontend started in background with PID 89061.
+[2026-05-28 22:24:13] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-05-28 22:24:57 [INFO] 收到问题: 你好
+[92m22:25:03 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+2026-05-28 22:25:03 [WARNING] LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+[92m22:25:05 - LiteLLM:WARNING[0m: common_utils.py:979 - litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 22:25:05 [WARNING] litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+[92m22:25:05 - LiteLLM:WARNING[0m: common_utils.py:24 - litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 22:25:05 [WARNING] litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-28 22:25:06 [INFO] Agent 初始化完成
+[92m22:25:06 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:25:06 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m22:25:12 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:12 [INFO] Wrapper: Completed Call, calling success_handler
+[92m22:25:12 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:25:12 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m22:25:17 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:17 [INFO] Wrapper: Completed Call, calling success_handler
+[92m22:25:17 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:25:17 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m22:25:19 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:19 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:19 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-28 22:25:36 [INFO] 收到问题: 你能做什么？
+[92m22:25:36 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:25:36 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m22:25:40 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:40 [INFO] Wrapper: Completed Call, calling success_handler
+[92m22:25:40 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-28 22:25:40 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m22:25:46 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:46 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-28 22:25:46 [INFO] "POST /api/ask HTTP/1.1" 200 -
+[2026-05-28 23:52:10] Stopping Frontend (PID 89061)...
+[2026-05-28 23:52:11] Frontend stopped.
+[2026-05-28 23:52:11] Stopping Backend (PID 89047)...
+[2026-05-28 23:52:12] Backend stopped.
+[2026-05-28 23:52:18] Starting backend...
+2026-05-28 23:52:18 [INFO] 🦞 Lobster 启动
+2026-05-28 23:52:18 [INFO] ⏰ 调度器启动
+2026-05-28 23:52:18 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-28 23:52:18 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-28 23:52:18 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-28 23:52:18 [INFO] 📅 新的一天：2026-05-28
+2026-05-28 23:52:18 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-28 23:52:19 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-28 23:52:19] Backend started in background with PID 89754.
+[2026-05-28 23:52:19] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 220 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-05-28 23:52:20] Frontend started in background with PID 89768.
+[2026-05-28 23:52:20] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-05-29 00:01:16 [INFO] 📅 新的一天：2026-05-29
+2026-05-29 07:51:09 [INFO] 收到问题: what is the weather like today in shanghai
+[92m07:51:13 - LiteLLM:WARNING[0m: common_utils.py:979 - litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-29 07:51:13 [WARNING] litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+[92m07:51:14 - LiteLLM:WARNING[0m: common_utils.py:24 - litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-29 07:51:14 [WARNING] litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-05-29 07:51:14 [INFO] Agent 初始化完成
+[92m07:51:14 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-29 07:51:14 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m07:51:15 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-29 07:51:15 [INFO] Wrapper: Completed Call, calling success_handler
+[92m07:51:15 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-29 07:51:15 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m07:51:16 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-29 07:51:16 [INFO] Wrapper: Completed Call, calling success_handler
+[92m07:51:19 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-05-29 07:51:19 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m07:51:19 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-05-29 07:51:19 [INFO] Wrapper: Completed Call, calling success_handler
+2026-05-29 07:51:19 [INFO] "POST /api/ask HTTP/1.1" 200 -
+2026-05-29 09:30:47 [INFO] ▶ 开始生成餐饮趋势简报...
+2026-05-29 09:31:13 [INFO] ✅ 餐饮趋势简报推送成功
+2026-05-30 00:00:06 [INFO] 📅 新的一天：2026-05-30
+2026-05-30 23:50:18 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-30 23:50:18] Backend is already running on :8765.
+[2026-05-30 23:50:18] Frontend is already running with PID 89768.
+[2026-05-30 23:50:18] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-05-31 00:00:29 [INFO] 📅 新的一天：2026-05-31
+2026-05-31 09:30:45 [INFO] ▶ 开始生成餐饮趋势简报...
+2026-05-31 11:07:17 [INFO] Retrying request to /chat/completions in 0.414427 seconds
+2026-05-31 11:07:29 [INFO] ✅ 餐饮趋势简报推送成功
+[2026-05-31 16:18:07] Starting backend...
+2026-05-31 16:18:07 [INFO] 🦞 Lobster 启动
+2026-05-31 16:18:07 [INFO] ⏰ 调度器启动
+2026-05-31 16:18:07 [INFO]    财经简报:   每天 09:00 → WxPusher
+2026-05-31 16:18:07 [INFO]    餐饮趋势:   每天 09:30 → 飞书
+2026-05-31 16:18:07 [INFO]    财报日历:   每周一 08:00 → WxPusher
+2026-05-31 16:18:07 [INFO] 📅 新的一天：2026-05-31
+2026-05-31 16:18:12 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+2026-05-31 16:18:13 [INFO] "GET /health HTTP/1.1" 200 -
+[2026-05-31 16:18:13] Backend started in background with PID 4848.
+[2026-05-31 16:18:13] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 287 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://172.17.1.98:5173/
+[2026-05-31 16:18:14] Frontend started in background with PID 4868.
+[2026-05-31 16:18:14] Lobster is running in the background. Logs are being appended to lobster.log.

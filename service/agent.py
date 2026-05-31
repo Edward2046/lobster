@@ -34,7 +34,15 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
-from service.tools import get_current_time, calculate, get_weather, get_investing_news, get_earnings_calendar, get_food_trends
+from service.tools import (
+    get_current_time,
+    calculate,
+    get_weather,
+    get_investing_news,
+    get_earnings_calendar,
+    get_food_trends,
+    get_scheduled_task_count,
+)
 
 # 从 .env 文件加载环境变量（DEEPSEEK_API_KEY 等）
 load_dotenv()
@@ -63,7 +71,15 @@ model = LiteLLMModel(
 #   max_steps     — 最多执行几轮 Thought→Code→Observation 循环，防止死循环
 #   verbosity_level — 日志详细程度：0=静默，1=显示每步摘要，2=显示完整代码
 agent = CodeAgent(
-    tools=[get_current_time, calculate, get_weather, get_investing_news, get_earnings_calendar, get_food_trends],
+    tools=[
+        get_current_time,
+        calculate,
+        get_weather,
+        get_investing_news,
+        get_earnings_calendar,
+        get_food_trends,
+        get_scheduled_task_count,
+    ],
     model=model,
     max_steps=5,
     verbosity_level=1,
