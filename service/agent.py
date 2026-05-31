@@ -34,6 +34,7 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
+from service.agent_prompt import get_prompt_templates
 from service.tools import (
     get_current_time,
     calculate,
@@ -41,7 +42,14 @@ from service.tools import (
     get_investing_news,
     get_earnings_calendar,
     get_food_trends,
-    get_scheduled_task_count,
+    create_task,
+    list_tasks,
+    delete_task,
+    run_task_now,
+    update_task,
+    execute_python,
+    search_web,
+    send_notification,
 )
 
 # 从 .env 文件加载环境变量（DEEPSEEK_API_KEY 等）
@@ -78,10 +86,19 @@ agent = CodeAgent(
         get_investing_news,
         get_earnings_calendar,
         get_food_trends,
-        get_scheduled_task_count,
+        create_task,
+        list_tasks,
+        delete_task,
+        run_task_now,
+        update_task,
+        execute_python,
+        search_web,
+        send_notification,
     ],
     model=model,
-    max_steps=5,
+    prompt_templates=get_prompt_templates(),
+    additional_authorized_imports=["*"],
+    max_steps=15,
     verbosity_level=1,
 )
 

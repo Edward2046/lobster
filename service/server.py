@@ -30,10 +30,12 @@ def get_agent():
     with _agent_lock:
         if _agent is None:
             from smolagents import CodeAgent, LiteLLMModel
+            from service.agent_prompt import get_prompt_templates
             from service.tools import (
                 get_current_time, calculate, get_weather,
                 get_investing_news, get_earnings_calendar, get_food_trends,
-                get_scheduled_task_count,
+                create_task, list_tasks, delete_task, run_task_now, update_task,
+                execute_python, search_web, send_notification,
             )
 
             model = LiteLLMModel(
@@ -45,9 +47,12 @@ def get_agent():
             _agent = CodeAgent(
                 tools=[get_current_time, calculate, get_weather,
                        get_investing_news, get_earnings_calendar, get_food_trends,
-                       get_scheduled_task_count],
+                       create_task, list_tasks, delete_task, run_task_now, update_task,
+                       execute_python, search_web, send_notification],
                 model=model,
-                max_steps=5,
+                prompt_templates=get_prompt_templates(),
+                additional_authorized_imports=["*"],
+                max_steps=15,
                 verbosity_level=0,
             )
             log.info("Agent 初始化完成")
