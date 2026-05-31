@@ -13,7 +13,7 @@ class WebSearchToolTests(unittest.TestCase):
 
     def test_search_success_formats_markdown_results(self):
         class FakeTavilyClient:
-            def search(self, query, max_results=5):
+            def search(self, query, max_results):
                 return {
                     "results": [
                         {"title": "Title 1", "url": "https://example.com/1", "content": "Summary 1"},
@@ -32,7 +32,7 @@ class WebSearchToolTests(unittest.TestCase):
 
     def test_search_failure_returns_helpful_message(self):
         class FakeTavilyClient:
-            def search(self, query, max_results=5):
+            def search(self, query, max_results):
                 raise RuntimeError("network down")
 
         with patch.dict(os.environ, {"TAVILY_API_KEY": "test-key"}, clear=True):

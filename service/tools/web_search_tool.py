@@ -39,7 +39,7 @@ def search_web(query: str, max_results: int = 5) -> str:
         return f"No web results found for '{query}'."
 
     items = []
-    for index, result in enumerate(results[:max_results], start=1):
+    for index, result in enumerate(results, start=1):
         title = result.get("title") or "Untitled"
         url = result.get("url") or ""
         summary = result.get("content") or result.get("snippet") or "No summary available."
