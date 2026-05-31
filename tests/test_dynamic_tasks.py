@@ -1,6 +1,7 @@
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from service.db import get_task_record, list_task_records
 from service.scheduler import initialize_scheduler, parse_schedule_expr, scheduler
@@ -58,6 +59,27 @@ class DynamicTaskTests(unittest.TestCase):
         delete_task("demo-task")
         remaining_names = {task["name"] for task in list_task_records()}
         self.assertNotIn("demo-task", remaining_names)
+
+    def test_run_task_injects_tool_globals(self):
+        create_task("tool-task", "every hour", "_result = search_web('latest ai news')", "feishu", "tool globals")
+
+        with patch(
+            "service.tools.code_executor_tool.execute_python_code",
+            return_value={"success": True, "rendered": "ok"},
+        ) as mock_execute:
+            output = run_task_now("tool-task")
+
+        self.assertEqual(output, "ok")
+        extra_globals = mock_execute.call_args.kwargs["extra_globals"]
+        self.assertIn("get_current_time", extra_globals)
+        self.assertIn("calculate", extra_globals)
+        self.assertIn("get_weather", extra_globals)
+        self.assertIn("get_investing_news", extra_globals)
+        self.assertIn("get_earnings_calendar", extra_globals)
+        self.assertIn("get_food_trends", extra_globals)
+        self.assertIn("search_web", extra_globals)
+        self.assertEqual(extra_globals["notify_channel"], "feishu")
+        self.assertEqual(extra_globals["task_name"], "tool-task")
 
 
 if __name__ == "__main__":
