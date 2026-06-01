@@ -84,3 +84,146 @@ litellm.Timeout: Timeout Error: DeepseekException - litellm.Timeout: Connection 
 2026-05-29 09:00:13 [INFO] ✅ 财经简报推送成功
 2026-05-29 09:30:14 [INFO] ▶ 开始生成餐饮趋势简报...
 2026-05-29 09:30:33 [INFO] ✅ 餐饮趋势简报推送成功
+[2026-06-01 23:56:58] Stopping Frontend (PID 9892)...
+[2026-06-01 23:56:59] Frontend stopped.
+[2026-06-01 23:56:59] Stopping Backend (PID 9877)...
+[2026-06-01 23:57:00] Backend stopped.
+[2026-06-01 23:57:05] Starting backend...
+2026-06-01 23:57:05 [INFO] 🦞 Lobster 启动
+2026-06-01 23:57:05 [INFO] ⏰ 调度器启动
+2026-06-01 23:57:05 [INFO]    earnings: every monday at 08:00 → wxpusher
+2026-06-01 23:57:05 [INFO]    finance: every day at 09:00 → wxpusher
+2026-06-01 23:57:05 [INFO]    food: every day at 09:30 → feishu
+2026-06-01 23:57:05 [INFO]    ai-daily-news-push: every day at 08:30 → wxpusher
+2026-06-01 23:57:05 [INFO]    daily-stock-recommendation: every day at 08:00 → wxpusher
+2026-06-01 23:57:05 [INFO]    weekly-stock-recommendation: every monday at 09:00 → wxpusher
+2026-06-01 23:57:06 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-01 23:57:06] Backend started in background with PID 25881.
+[2026-06-01 23:57:06] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 225 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-06-01 23:57:07] Frontend started in background with PID 25895.
+[2026-06-01 23:57:07] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-06-01 23:57:38 [INFO] 收到问题: 你好
+2026-06-01 23:57:39 [ERROR] Agent 执行出错: No module named 'psutil'
+[2026-06-01 23:57:50] Stopping Frontend (PID 25895)...
+[2026-06-01 23:57:51] Frontend stopped.
+[2026-06-01 23:57:51] Stopping Backend (PID 25881)...
+[2026-06-01 23:57:52] Backend stopped.
+[2026-06-01 23:58:41] Starting backend...
+2026-06-01 23:58:41 [INFO] 🦞 Lobster 启动
+2026-06-01 23:58:41 [INFO] ⏰ 调度器启动
+2026-06-01 23:58:41 [INFO]    earnings: every monday at 08:00 → wxpusher
+2026-06-01 23:58:41 [INFO]    finance: every day at 09:00 → wxpusher
+2026-06-01 23:58:41 [INFO]    food: every day at 09:30 → feishu
+2026-06-01 23:58:41 [INFO]    ai-daily-news-push: every day at 08:30 → wxpusher
+2026-06-01 23:58:41 [INFO]    daily-stock-recommendation: every day at 08:00 → wxpusher
+2026-06-01 23:58:41 [INFO]    weekly-stock-recommendation: every monday at 09:00 → wxpusher
+2026-06-01 23:58:42 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-01 23:58:42] Backend started in background with PID 25975.
+[2026-06-01 23:58:42] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 220 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-06-01 23:58:44] Frontend started in background with PID 25989.
+[2026-06-01 23:58:44] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-06-01 23:58:53 [INFO] 收到问题: 你好
+2026-06-01 23:58:53 [ERROR] Agent 执行出错: No module named 'psutil'
+2026-06-01 23:59:00 [INFO] 收到问题: hello
+2026-06-01 23:59:00 [ERROR] Agent 执行出错: No module named 'psutil'
+[2026-06-02 00:04:43] Stopping Frontend (PID 25989)...
+[2026-06-02 00:04:44] Frontend stopped.
+[2026-06-02 00:04:44] Stopping Backend (PID 25975)...
+[2026-06-02 00:04:45] Backend stopped.
+[2026-06-02 00:04:48] Starting backend...
+2026-06-02 00:04:48 [INFO] 🦞 Lobster 启动
+2026-06-02 00:04:48 [INFO] ⏰ 调度器启动
+2026-06-02 00:04:48 [INFO]    earnings: every monday at 08:00 → wxpusher
+2026-06-02 00:04:48 [INFO]    finance: every day at 09:00 → wxpusher
+2026-06-02 00:04:48 [INFO]    food: every day at 09:30 → feishu
+2026-06-02 00:04:48 [INFO]    ai-daily-news-push: every day at 08:30 → wxpusher
+2026-06-02 00:04:48 [INFO]    daily-stock-recommendation: every day at 08:00 → wxpusher
+2026-06-02 00:04:48 [INFO]    weekly-stock-recommendation: every monday at 09:00 → wxpusher
+2026-06-02 00:04:49 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-02 00:04:49] Backend started in background with PID 27383.
+[2026-06-02 00:04:49] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 221 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.54:5173/
+[2026-06-02 00:04:50] Frontend started in background with PID 27397.
+[2026-06-02 00:04:50] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-06-02 00:04:58 [INFO] 收到问题: 你好
+[92m00:05:02 - LiteLLM:WARNING[0m: common_utils.py:979 - litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-06-02 00:05:02 [WARNING] litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+[92m00:05:02 - LiteLLM:WARNING[0m: common_utils.py:24 - litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-06-02 00:05:02 [WARNING] litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-06-02 00:05:03 [INFO] Agent 初始化完成
+[92m00:05:03 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:05:03 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:05:04 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:04 [INFO] Wrapper: Completed Call, calling success_handler
+[92m00:05:04 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:05:04 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:05:07 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:07 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:36 [INFO] 收到问题: 你能监控吗
+[92m00:05:36 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:05:36 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:05:41 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:41 [INFO] Wrapper: Completed Call, calling success_handler
+[92m00:05:41 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:05:41 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:05:44 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:44 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:56 [INFO] 收到问题: 帮我监控一下服务器的 CPU 和内存
+[92m00:05:56 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:05:56 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:05:59 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:05:59 [INFO] Wrapper: Completed Call, calling success_handler
+[92m00:06:00 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:06:00 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:06:04 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:06:04 [INFO] Wrapper: Completed Call, calling success_handler
+[92m00:06:04 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:06:04 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:06:08 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:06:08 [INFO] Wrapper: Completed Call, calling success_handler
+[92m00:06:09 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 00:06:09 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m00:06:14 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 00:06:14 [INFO] Wrapper: Completed Call, calling success_handler
