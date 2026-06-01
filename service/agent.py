@@ -34,7 +34,12 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
-from service.tools import get_current_time, calculate, get_weather, get_investing_news, get_earnings_calendar, get_food_trends
+from service.tools import (
+    get_current_time, calculate, get_weather,
+    get_investing_news, get_earnings_calendar, get_food_trends,
+    search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+)
+from service.memory import get_memory_manager
 
 # 从 .env 文件加载环境变量（DEEPSEEK_API_KEY 等）
 load_dotenv()
@@ -63,7 +68,11 @@ model = LiteLLMModel(
 #   max_steps     — 最多执行几轮 Thought→Code→Observation 循环，防止死循环
 #   verbosity_level — 日志详细程度：0=静默，1=显示每步摘要，2=显示完整代码
 agent = CodeAgent(
-    tools=[get_current_time, calculate, get_weather, get_investing_news, get_earnings_calendar, get_food_trends],
+    tools=[
+        get_current_time, calculate, get_weather,
+        get_investing_news, get_earnings_calendar, get_food_trends,
+        search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+    ],
     model=model,
     max_steps=5,
     verbosity_level=1,
@@ -74,13 +83,26 @@ agent = CodeAgent(
 
 def run_once(question: str) -> None:
     """向 Agent 提一个问题，打印结果后返回。"""
+    memory = get_memory_manager()
+
+    # 注入短期记忆（最近 5 条对话）
+    context = memory.format_recent_context(limit=5)
+    if context:
+        question_with_context = f"{context}\n\n当前问题：{question}"
+    else:
+        question_with_context = question
+
     print(f"\nQuestion: {question}")
     print("-" * 40)
     # agent.run() 是同步阻塞调用，内部会循环执行推理→工具调用→观察，
     # 直到 Agent 调用 final_answer() 或达到 max_steps 上限。
-    answer = agent.run(question)
+    answer = agent.run(question_with_context)
     print("-" * 40)
     print(f"Answer: {answer}\n")
+
+    # 保存对话到记忆
+    memory.save_conversation(role="user", content=question)
+    memory.save_conversation(role="agent", content=str(answer))
 
 
 # ── 交互模式 ──────────────────────────────────────────────────────────────────

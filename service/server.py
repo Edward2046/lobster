@@ -27,6 +27,7 @@ def get_agent():
         from service.tools import (
             get_current_time, calculate, get_weather,
             get_investing_news, get_earnings_calendar, get_food_trends,
+            search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
         )
 
         model = LiteLLMModel(
@@ -36,8 +37,11 @@ def get_agent():
             num_retries=0,
         )
         _agent = CodeAgent(
-            tools=[get_current_time, calculate, get_weather,
-                   get_investing_news, get_earnings_calendar, get_food_trends],
+            tools=[
+                get_current_time, calculate, get_weather,
+                get_investing_news, get_earnings_calendar, get_food_trends,
+                search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+            ],
             model=model,
             max_steps=5,
             verbosity_level=0,
@@ -91,8 +95,24 @@ class AgentHandler(BaseHTTPRequestHandler):
 
         log.info("收到问题: %s", question)
         try:
-            answer = get_agent().run(question)
-            self._send_json(200, {"answer": str(answer)})
+            from service.memory import get_memory_manager
+            memory = get_memory_manager()
+
+            # 注入短期记忆（最近 5 条对话）
+            context = memory.format_recent_context(limit=5)
+            if context:
+                question_with_context = f"{context}\n\n当前问题：{question}"
+            else:
+                question_with_context = question
+
+            answer = get_agent().run(question_with_context)
+            answer_str = str(answer)
+
+            # 保存对话到记忆
+            memory.save_conversation(role="user", content=question)
+            memory.save_conversation(role="agent", content=answer_str)
+
+            self._send_json(200, {"answer": answer_str})
         except Exception as e:
             log.error("Agent 执行出错: %s", e)
             self._send_json(500, {"error": str(e)})

@@ -79,3 +79,8 @@ LiteLLM completion() model= deepseek-reasoner; provider = deepseek
 2026-05-28 19:27:32 [ERROR] Agent 执行出错: Error in generating model output:
 litellm.Timeout: Timeout Error: DeepseekException - litellm.Timeout: Connection timed out after 30.0 seconds.
 2026-05-28 19:27:32 [INFO] "POST /api/ask HTTP/1.1" 500 -
+2026-05-29 00:00:05 [INFO] 📅 新的一天：2026-05-29
+2026-05-29 09:00:11 [INFO] ▶ 开始生成财经简报...
+2026-05-29 09:00:13 [INFO] ✅ 财经简报推送成功
+2026-05-29 09:30:14 [INFO] ▶ 开始生成餐饮趋势简报...
+2026-05-29 09:30:33 [INFO] ✅ 餐饮趋势简报推送成功
