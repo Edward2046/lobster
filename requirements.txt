@@ -1,5 +1,9 @@
-smolagents>=1.0.0
+smolagents[litellm]>=1.0.0
 pytz>=2024.1
 requests>=2.31.0
 python-dotenv>=1.0.0
 openai>=1.0.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+schedule>=1.2.0
+tavily-python>=0.3.0

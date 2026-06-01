@@ -34,10 +34,27 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
+from service.agent_prompt import get_prompt_templates
 from service.tools import (
-    get_current_time, calculate, get_weather,
-    get_investing_news, get_earnings_calendar, get_food_trends,
-    search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+    get_current_time,
+    calculate,
+    get_weather,
+    get_investing_news,
+    get_earnings_calendar,
+    get_food_trends,
+    search_memory,
+    remember_fact,
+    recall_fact,
+    list_all_facts,
+    forget_fact,
+    create_task,
+    list_tasks,
+    delete_task,
+    run_task_now,
+    update_task,
+    execute_python,
+    search_web,
+    send_notification,
 )
 from service.memory import get_memory_manager
 
@@ -69,12 +86,30 @@ model = LiteLLMModel(
 #   verbosity_level — 日志详细程度：0=静默，1=显示每步摘要，2=显示完整代码
 agent = CodeAgent(
     tools=[
-        get_current_time, calculate, get_weather,
-        get_investing_news, get_earnings_calendar, get_food_trends,
-        search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+        get_current_time,
+        calculate,
+        get_weather,
+        get_investing_news,
+        get_earnings_calendar,
+        get_food_trends,
+        search_memory,
+        remember_fact,
+        recall_fact,
+        list_all_facts,
+        forget_fact,
+        create_task,
+        list_tasks,
+        delete_task,
+        run_task_now,
+        update_task,
+        execute_python,
+        search_web,
+        send_notification,
     ],
     model=model,
-    max_steps=5,
+    prompt_templates=get_prompt_templates(),
+    additional_authorized_imports=["*"],
+    max_steps=15,
     verbosity_level=1,
 )
 
