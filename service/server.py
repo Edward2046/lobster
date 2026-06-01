@@ -39,6 +39,7 @@ def get_agent():
                 execute_python, search_web, send_notification,
                 get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
                 check_database_health, run_diagnostics,
+                get_container_metrics, get_container_logs,
             )
 
             model = LiteLLMModel(
@@ -56,6 +57,7 @@ def get_agent():
                     execute_python, search_web, send_notification,
                     get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
                     check_database_health, run_diagnostics,
+                    get_container_metrics, get_container_logs,
                 ],
                 model=model,
                 prompt_templates=get_prompt_templates(),

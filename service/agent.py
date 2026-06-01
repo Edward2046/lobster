@@ -61,6 +61,8 @@ from service.tools import (
     list_recent_alerts,
     check_database_health,
     run_diagnostics,
+    get_container_metrics,
+    get_container_logs,
 )
 from service.memory import get_memory_manager
 
@@ -117,6 +119,8 @@ agent = CodeAgent(
         list_recent_alerts,
         check_database_health,
         run_diagnostics,
+        get_container_metrics,
+        get_container_logs,
     ],
     model=model,
     prompt_templates=get_prompt_templates(),
