@@ -55,6 +55,12 @@ from service.tools import (
     execute_python,
     search_web,
     send_notification,
+    get_system_metrics,
+    analyze_logs,
+    send_alert,
+    list_recent_alerts,
+    check_database_health,
+    run_diagnostics,
 )
 from service.memory import get_memory_manager
 
@@ -105,6 +111,12 @@ agent = CodeAgent(
         execute_python,
         search_web,
         send_notification,
+        get_system_metrics,
+        analyze_logs,
+        send_alert,
+        list_recent_alerts,
+        check_database_health,
+        run_diagnostics,
     ],
     model=model,
     prompt_templates=get_prompt_templates(),

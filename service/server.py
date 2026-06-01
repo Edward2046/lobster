@@ -37,6 +37,8 @@ def get_agent():
                 search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
                 create_task, list_tasks, delete_task, run_task_now, update_task,
                 execute_python, search_web, send_notification,
+                get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
+                check_database_health, run_diagnostics,
             )
 
             model = LiteLLMModel(
@@ -52,6 +54,8 @@ def get_agent():
                     search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
                     create_task, list_tasks, delete_task, run_task_now, update_task,
                     execute_python, search_web, send_notification,
+                    get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
+                    check_database_health, run_diagnostics,
                 ],
                 model=model,
                 prompt_templates=get_prompt_templates(),

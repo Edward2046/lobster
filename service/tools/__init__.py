@@ -16,6 +16,11 @@ from service.tools.task_manager_tool import create_task, list_tasks, delete_task
 from service.tools.code_executor_tool import execute_python
 from service.tools.web_search_tool import search_web
 from service.tools.notify_tool import send_notification
+from service.tools.system_monitor_tool import get_system_metrics
+from service.tools.log_analyzer_tool import analyze_logs
+from service.tools.alert_tool import send_alert, list_recent_alerts
+from service.tools.database_health_tool import check_database_health
+from service.tools.diagnostics_tool import run_diagnostics
 
 __all__ = [
     "get_current_time",
@@ -38,4 +43,10 @@ __all__ = [
     "execute_python",
     "search_web",
     "send_notification",
+    "get_system_metrics",
+    "analyze_logs",
+    "send_alert",
+    "list_recent_alerts",
+    "check_database_health",
+    "run_diagnostics",
 ]
