@@ -21,18 +21,20 @@ import argparse
 import threading
 
 from dotenv import load_dotenv
+load_dotenv()
+
+from config import settings
 from service.db import get_task_record
 from service.scheduler import initialize_scheduler, run_scheduler_loop, run_task_by_name
-load_dotenv()
 
 # ── 日志配置 ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    level=getattr(logging, settings.log.LOG_LEVEL.upper(), logging.INFO),
+    format=settings.log.LOG_FORMAT,
+    datefmt=settings.log.LOG_DATE_FORMAT,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("logs/lobster.log", encoding="utf-8"),
+        logging.FileHandler(settings.log.LOG_FILE, encoding="utf-8"),
     ],
 )
 log = logging.getLogger("lobster")
@@ -61,8 +63,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--port",
         type=int,
-        default=8765,
-        help="Agent HTTP 服务端口（默认 8765）",
+        default=settings.server.BACKEND_PORT,
+        help=f"Agent HTTP 服务端口（默认 {settings.server.BACKEND_PORT}）",
     )
     args = parser.parse_args()
 

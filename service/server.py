@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from starlette.responses import JSONResponse
 import uvicorn
 from service.brain import LobsterBrain
+from config import settings
 
 log = logging.getLogger("lobster.server")
 
@@ -46,10 +47,10 @@ def get_agent():
             )
 
             model = LiteLLMModel(
-                model_id="deepseek/deepseek-reasoner",
-                api_key=os.environ.get("DEEPSEEK_API_KEY"),
-                timeout=30,
-                num_retries=0,
+                model_id=settings.agent.MODEL_ID,
+                api_key=settings.agent.DEEPSEEK_API_KEY or os.environ.get("DEEPSEEK_API_KEY"),
+                timeout=settings.agent.TIMEOUT,
+                num_retries=settings.agent.NUM_RETRIES,
             )
             _agent = CodeAgent(
                 tools=[
@@ -66,8 +67,8 @@ def get_agent():
                 model=model,
                 prompt_templates=get_prompt_templates(),
                 additional_authorized_imports=["*"],
-                max_steps=15,
-                verbosity_level=0,
+                max_steps=settings.agent.MAX_STEPS,
+                verbosity_level=settings.agent.VERBOSITY_LEVEL,
             )
             log.info("Agent 初始化完成")
     return _agent
@@ -125,6 +126,8 @@ def ask(req: AskRequest):
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 
-def start_server(host: str = "0.0.0.0", port: int = 8765):
+def start_server(host: str = None, port: int = None):
+    host = host or settings.server.BACKEND_HOST
+    port = port or settings.server.BACKEND_PORT
     log.info("🌐 Agent HTTP 服务启动: http://%s:%d", host, port)
     uvicorn.run(app, host=host, port=port, log_level="warning")

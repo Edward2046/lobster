@@ -7,9 +7,11 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from smolagents import tool
 
+from config import settings
 
-# 告警历史文件路径
-ALERT_HISTORY_FILE = Path(__file__).parent.parent.parent / "data" / "alert_history.json"
+
+# 告警历史文件路径（从配置中心读取）
+ALERT_HISTORY_FILE = settings.alert.HISTORY_FILE
 
 
 def _load_alert_history() -> dict:
@@ -63,7 +65,7 @@ def send_alert(
     title: str,
     message: str,
     level: str = "WARNING",
-    dedupe_minutes: int = 60
+    dedupe_minutes: int = settings.alert.DEFAULT_DEDUPE_MINUTES
 ) -> str:
     """Send an intelligent alert with automatic deduplication and channel selection.
 

@@ -4,6 +4,8 @@ import psutil
 import os
 from smolagents import tool
 
+from config import settings
+
 
 @tool
 def get_system_metrics() -> str:
@@ -21,7 +23,7 @@ def get_system_metrics() -> str:
     cpu_count = psutil.cpu_count()
     load_avg = psutil.getloadavg() if hasattr(psutil, "getloadavg") else (0, 0, 0)
 
-    cpu_status = "⚠️ 高负载" if cpu_percent > 80 else "✅ 正常"
+    cpu_status = "⚠️ 高负载" if cpu_percent > settings.monitor.CPU_ALERT_THRESHOLD else "✅ 正常"
     lines.append(f"【CPU】{cpu_status}")
     lines.append(f"  使用率: {cpu_percent}%")
     lines.append(f"  核心数: {cpu_count}")
@@ -32,7 +34,7 @@ def get_system_metrics() -> str:
     mem = psutil.virtual_memory()
     mem_used_gb = mem.used / (1024 ** 3)
     mem_total_gb = mem.total / (1024 ** 3)
-    mem_status = "⚠️ 内存紧张" if mem.percent > 85 else "✅ 正常"
+    mem_status = "⚠️ 内存紧张" if mem.percent > settings.monitor.MEMORY_ALERT_THRESHOLD else "✅ 正常"
 
     lines.append(f"【内存】{mem_status}")
     lines.append(f"  使用率: {mem.percent}%")
@@ -45,7 +47,7 @@ def get_system_metrics() -> str:
 
     # 根目录
     disk_root = psutil.disk_usage("/")
-    root_status = "⚠️ 空间不足" if disk_root.percent > 90 else "✅ 正常"
+    root_status = "⚠️ 空间不足" if disk_root.percent > settings.monitor.DISK_ALERT_THRESHOLD else "✅ 正常"
     lines.append(f"  根目录 {root_status}")
     lines.append(f"    使用率: {disk_root.percent}%")
     lines.append(f"    已用: {disk_root.used / (1024 ** 3):.1f} GB / {disk_root.total / (1024 ** 3):.1f} GB")
@@ -75,7 +77,7 @@ def get_system_metrics() -> str:
     lines.append(f"  线程数: {process.num_threads()}")
 
     # 检查是否有内存泄漏风险（进程内存超过 500MB）
-    if proc_mem > 500:
+    if proc_mem > settings.monitor.PROCESS_MEMORY_MB_THRESHOLD:
         lines.append(f"  ⚠️ 警告: 进程内存较高 ({proc_mem:.1f} MB)，可能存在内存泄漏")
 
     lines.append("")
@@ -87,13 +89,13 @@ def get_system_metrics() -> str:
     # 总体健康评分
     lines.append("\n【健康评分】")
     issues = []
-    if cpu_percent > 80:
+    if cpu_percent > settings.monitor.CPU_ALERT_THRESHOLD:
         issues.append("CPU 负载过高")
-    if mem.percent > 85:
+    if mem.percent > settings.monitor.MEMORY_ALERT_THRESHOLD:
         issues.append("内存使用过高")
-    if disk_root.percent > 90:
+    if disk_root.percent > settings.monitor.DISK_ALERT_THRESHOLD:
         issues.append("磁盘空间不足")
-    if proc_mem > 500:
+    if proc_mem > settings.monitor.PROCESS_MEMORY_MB_THRESHOLD:
         issues.append("进程内存过高")
 
     if not issues:

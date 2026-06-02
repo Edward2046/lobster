@@ -2,8 +2,9 @@
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="$ROOT_DIR/lobster.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+LOG_FILE="$ROOT_DIR/logs/lobster.log"
 BACKEND_PID_FILE="$ROOT_DIR/.lobster-backend.pid"
 FRONTEND_PID_FILE="$ROOT_DIR/.lobster-frontend.pid"
 BACKEND_HEALTH_URL="http://127.0.0.1:8765/health"

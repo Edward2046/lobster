@@ -5,8 +5,10 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
 
+from config import settings
 
-_DEFAULT_DB_PATH = Path(__file__).resolve().parents[1] / "data" / "tasks.db"
+
+_DEFAULT_DB_PATH = settings.task.DB_PATH
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (

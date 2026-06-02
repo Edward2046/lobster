@@ -4,6 +4,8 @@ import subprocess
 import json
 from smolagents import tool
 
+from config import settings
+
 
 @tool
 def get_container_metrics(container_name: str = "") -> str:
@@ -136,14 +138,14 @@ def _monitor_docker_container(container_name: str, lines: list) -> str:
 
             # CPU
             cpu_val = float(cpu_perc.rstrip('%'))
-            cpu_status = "⚠️ 高负载" if cpu_val > 80 else "✅ 正常"
+            cpu_status = "⚠️ 高负载" if cpu_val > settings.monitor.CPU_ALERT_THRESHOLD else "✅ 正常"
             lines.append(f"【CPU】{cpu_status}")
             lines.append(f"  使用率: {cpu_perc}")
             lines.append("")
 
             # 内存
             mem_val = float(mem_perc.rstrip('%'))
-            mem_status = "⚠️ 内存紧张" if mem_val > 85 else "✅ 正常"
+            mem_status = "⚠️ 内存紧张" if mem_val > settings.monitor.MEMORY_ALERT_THRESHOLD else "✅ 正常"
             lines.append(f"【内存】{mem_status}")
             lines.append(f"  使用率: {mem_perc}")
             lines.append(f"  用量: {mem_usage}")
@@ -184,11 +186,11 @@ def _monitor_docker_container(container_name: str, lines: list) -> str:
         # 健康评分
         lines.append("【健康评分】")
         issues = []
-        if cpu_val > 80:
+        if cpu_val > settings.monitor.CPU_ALERT_THRESHOLD:
             issues.append(f"CPU 使用率过高 ({cpu_perc})")
-        if mem_val > 85:
+        if mem_val > settings.monitor.MEMORY_ALERT_THRESHOLD:
             issues.append(f"内存使用率过高 ({mem_perc})")
-        if restart_count > 5:
+        if restart_count > settings.monitor.CONTAINER_RESTART_THRESHOLD:
             issues.append(f"重启次数过多 ({restart_count} 次)")
 
         if not issues:
@@ -323,7 +325,7 @@ def _monitor_k8s_pod(pod_name: str, lines: list) -> str:
         for container in pod_data['status'].get('containerStatuses', []):
             if not container['ready']:
                 issues.append(f"容器 {container['name']} 未就绪")
-            if container['restartCount'] > 5:
+            if container['restartCount'] > settings.monitor.CONTAINER_RESTART_THRESHOLD:
                 issues.append(f"容器 {container['name']} 重启次数过多 ({container['restartCount']} 次)")
 
         if not issues:

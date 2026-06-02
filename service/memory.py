@@ -21,8 +21,10 @@ from pathlib import Path
 from typing import Iterator
 from typing import Iterable, Optional
 
+from config import settings
 
-DB_PATH = Path(__file__).parent.parent / "data" / "memory.db"
+
+DB_PATH = settings.memory.DB_PATH
 _TOKEN_RE = re.compile(r"[0-9a-zA-Z_\u4e00-\u9fff]+")
 
 
