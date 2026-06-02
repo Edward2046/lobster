@@ -22,7 +22,7 @@ from typing import Iterator
 from typing import Iterable, Optional
 
 
-DB_PATH = Path(__file__).parent.parent / "memory.db"
+DB_PATH = Path(__file__).parent.parent / "data" / "memory.db"
 _TOKEN_RE = re.compile(r"[0-9a-zA-Z_\u4e00-\u9fff]+")
 
 

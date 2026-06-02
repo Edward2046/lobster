@@ -32,7 +32,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("lobster.log", encoding="utf-8"),
+        logging.FileHandler("logs/lobster.log", encoding="utf-8"),
     ],
 )
 log = logging.getLogger("lobster")

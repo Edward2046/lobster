@@ -9,7 +9,7 @@ from smolagents import tool
 
 
 # 告警历史文件路径
-ALERT_HISTORY_FILE = Path(__file__).parent.parent.parent / "alert_history.json"
+ALERT_HISTORY_FILE = Path(__file__).parent.parent.parent / "data" / "alert_history.json"
 
 
 def _load_alert_history() -> dict:

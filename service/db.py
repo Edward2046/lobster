@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterator
 
 
-_DEFAULT_DB_PATH = Path(__file__).resolve().parents[1] / "tasks.db"
+_DEFAULT_DB_PATH = Path(__file__).resolve().parents[1] / "data" / "tasks.db"
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (
