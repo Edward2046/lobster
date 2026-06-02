@@ -10,6 +10,10 @@ from service.tools.memory_tool import (
     recall_fact,
     list_all_facts,
     forget_fact,
+    create_goal,
+    list_active_goals,
+    complete_goal,
+    review_recent_reflections,
 )
 from service.tools.scheduled_tasks_tool import get_scheduled_task_count
 from service.tools.task_manager_tool import create_task, list_tasks, delete_task, run_task_now, update_task
@@ -35,6 +39,10 @@ __all__ = [
     "recall_fact",
     "list_all_facts",
     "forget_fact",
+    "create_goal",
+    "list_active_goals",
+    "complete_goal",
+    "review_recent_reflections",
     "get_scheduled_task_count",
     "create_task",
     "list_tasks",

@@ -17,12 +17,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 import uvicorn
+from service.brain import LobsterBrain
 
 log = logging.getLogger("lobster.server")
 
 # 延迟初始化 agent，避免在 import 时就加载模型
 _agent = None
 _agent_lock = threading.Lock()
+_brain = None
 
 
 def get_agent():
@@ -35,6 +37,7 @@ def get_agent():
                 get_current_time, calculate, get_weather,
                 get_investing_news, get_earnings_calendar, get_food_trends,
                 search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+                create_goal, list_active_goals, complete_goal, review_recent_reflections,
                 create_task, list_tasks, delete_task, run_task_now, update_task,
                 execute_python, search_web, send_notification,
                 get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
@@ -53,6 +56,7 @@ def get_agent():
                     get_current_time, calculate, get_weather,
                     get_investing_news, get_earnings_calendar, get_food_trends,
                     search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
+                    create_goal, list_active_goals, complete_goal, review_recent_reflections,
                     create_task, list_tasks, delete_task, run_task_now, update_task,
                     execute_python, search_web, send_notification,
                     get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
@@ -67,6 +71,14 @@ def get_agent():
             )
             log.info("Agent 初始化完成")
     return _agent
+
+
+def get_brain():
+    global _brain
+    with _agent_lock:
+        if _brain is None:
+            _brain = LobsterBrain()
+    return _brain
 
 
 app = FastAPI(title="Lobster Agent API")
@@ -104,23 +116,7 @@ def ask(req: AskRequest):
 
     log.info("收到问题: %s", question)
     try:
-        from service.memory import get_memory_manager
-        memory = get_memory_manager()
-
-        # 注入短期记忆（最近 5 条对话）
-        context = memory.format_recent_context(limit=5)
-        if context:
-            question_with_context = f"{context}\n\n当前问题：{question}"
-        else:
-            question_with_context = question
-
-        answer = get_agent().run(question_with_context)
-        answer_str = str(answer)
-
-        # 保存对话到记忆
-        memory.save_conversation(role="user", content=question)
-        memory.save_conversation(role="agent", content=answer_str)
-
+        answer_str = get_brain().answer(question, get_agent().run, session_id="http")
         return {"answer": answer_str}
     except Exception as e:
         log.error("Agent 执行出错: %s", e)

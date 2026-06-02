@@ -34,6 +34,7 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
+from service.brain import LobsterBrain
 from service.agent_prompt import get_prompt_templates
 from service.tools import (
     get_current_time,
@@ -47,6 +48,10 @@ from service.tools import (
     recall_fact,
     list_all_facts,
     forget_fact,
+    create_goal,
+    list_active_goals,
+    complete_goal,
+    review_recent_reflections,
     create_task,
     list_tasks,
     delete_task,
@@ -64,7 +69,6 @@ from service.tools import (
     get_container_metrics,
     get_container_logs,
 )
-from service.memory import get_memory_manager
 
 # 从 .env 文件加载环境变量（DEEPSEEK_API_KEY 等）
 load_dotenv()
@@ -105,6 +109,10 @@ agent = CodeAgent(
         recall_fact,
         list_all_facts,
         forget_fact,
+        create_goal,
+        list_active_goals,
+        complete_goal,
+        review_recent_reflections,
         create_task,
         list_tasks,
         delete_task,
@@ -129,31 +137,18 @@ agent = CodeAgent(
     verbosity_level=1,
 )
 
+brain = LobsterBrain()
+
 
 # ── 单次运行 ──────────────────────────────────────────────────────────────────
 
 def run_once(question: str) -> None:
     """向 Agent 提一个问题，打印结果后返回。"""
-    memory = get_memory_manager()
-
-    # 注入短期记忆（最近 5 条对话）
-    context = memory.format_recent_context(limit=5)
-    if context:
-        question_with_context = f"{context}\n\n当前问题：{question}"
-    else:
-        question_with_context = question
-
     print(f"\nQuestion: {question}")
     print("-" * 40)
-    # agent.run() 是同步阻塞调用，内部会循环执行推理→工具调用→观察，
-    # 直到 Agent 调用 final_answer() 或达到 max_steps 上限。
-    answer = agent.run(question_with_context)
+    answer = brain.answer(question, agent.run, session_id="cli")
     print("-" * 40)
     print(f"Answer: {answer}\n")
-
-    # 保存对话到记忆
-    memory.save_conversation(role="user", content=question)
-    memory.save_conversation(role="agent", content=str(answer))
 
 
 # ── 交互模式 ──────────────────────────────────────────────────────────────────

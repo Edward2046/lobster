@@ -103,3 +103,73 @@ def forget_fact(key: str) -> str:
         return f"已忘记：{key}"
     else:
         return f"没有找到关于 '{key}' 的记忆，无需删除。"
+
+
+@tool
+def create_goal(goal: str, success_criteria: str = "", priority: int = 3) -> str:
+    """Create or update an active goal in long-term planning memory.
+
+    Args:
+        goal: Goal description to track.
+        success_criteria: Optional completion criteria.
+        priority: Priority from 1 (highest) to 5 (lowest).
+    """
+    memory = get_memory_manager()
+    memory.set_goal(goal=goal, success_criteria=success_criteria, priority=priority, status="active")
+    return f"已记录目标：{goal}"
+
+
+@tool
+def list_active_goals(limit: int = 10) -> str:
+    """List active goals currently tracked by Lobster.
+
+    Args:
+        limit: Maximum number of goals to return.
+    """
+    limit = max(1, min(limit, 20))
+    memory = get_memory_manager()
+    goals = memory.list_goals(limit=limit, status="active")
+    if not goals:
+        return "当前没有激活目标。"
+
+    lines = [f"当前激活目标（共 {len(goals)} 条）：\n"]
+    for index, goal in enumerate(goals, 1):
+        criteria = goal["success_criteria"] or "未设置"
+        lines.append(f"{index}. [P{goal['priority']}] {goal['goal']}")
+        lines.append(f"   完成标准：{criteria}")
+    return "\n".join(lines)
+
+
+@tool
+def complete_goal(goal: str) -> str:
+    """Mark a tracked goal as completed.
+
+    Args:
+        goal: Goal description to mark as completed.
+    """
+    memory = get_memory_manager()
+    updated = memory.update_goal_status(goal=goal, status="completed")
+    if updated:
+        return f"目标已完成：{goal}"
+    return f"没有找到目标：{goal}"
+
+
+@tool
+def review_recent_reflections(limit: int = 5) -> str:
+    """Review recent reflections so the agent can learn from prior outcomes.
+
+    Args:
+        limit: Maximum number of reflections to return.
+    """
+    limit = max(1, min(limit, 10))
+    memory = get_memory_manager()
+    reflections = memory.list_recent_reflections(limit=limit)
+    if not reflections:
+        return "还没有可回顾的反思记录。"
+
+    lines = [f"最近反思（共 {len(reflections)} 条）：\n"]
+    for index, reflection in enumerate(reflections, 1):
+        lines.append(
+            f"{index}. [{reflection['outcome']}] {reflection['question'][:60]} -> {reflection['lessons'][:120]}"
+        )
+    return "\n".join(lines)

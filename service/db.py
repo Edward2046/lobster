@@ -1,6 +1,8 @@
 import os
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 
 _DEFAULT_DB_PATH = Path(__file__).resolve().parents[1] / "tasks.db"
@@ -27,12 +29,20 @@ def get_db_path() -> Path:
     return Path(os.environ.get("LOBSTER_TASK_DB", _DEFAULT_DB_PATH))
 
 
-def _connect() -> sqlite3.Connection:
+@contextmanager
+def _connect() -> Iterator[sqlite3.Connection]:
     db_path = get_db_path()
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
-    return conn
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def init_db() -> None:
