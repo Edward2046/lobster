@@ -240,6 +240,12 @@ def query_tasks_overview():
         status = "启用" if row["enabled"] else "禁用"
         print(f"  - {status}: {row['count']} 个")
 
+    # 任务类型分布
+    cursor.execute("SELECT task_type, COUNT(*) as count FROM tasks GROUP BY task_type")
+    print(f"\n【任务类型】")
+    for row in cursor.fetchall():
+        print(f"  - {row['task_type']}: {row['count']} 个")
+
     cursor.execute("SELECT last_run_status, COUNT(*) as count FROM tasks WHERE last_run_status IS NOT NULL GROUP BY last_run_status")
     print(f"\n【执行状态】")
     for row in cursor.fetchall():
@@ -250,6 +256,7 @@ def query_tasks_overview():
 
 def query_task_list():
     """查看所有任务"""
+    import json as _json
     conn = sqlite3.connect(TASKS_DB)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -259,18 +266,36 @@ def query_task_list():
     print("=" * 60)
 
     cursor.execute("""
-        SELECT name, schedule_expr, notify_channel, enabled, last_run_at, last_run_status, description
+        SELECT name, schedule_expr, notify_channel, enabled,
+               task_type, task_params,
+               last_run_at, last_run_status, description, builtin
         FROM tasks
-        ORDER BY enabled DESC, name
+        ORDER BY enabled DESC, builtin DESC, name
     """)
 
     for row in cursor.fetchall():
         status = "✅" if row["enabled"] else "❌"
         last_run = row["last_run_at"][:19] if row["last_run_at"] else "未运行"
         last_status = row["last_run_status"] or "N/A"
+        builtin_label = " [内置]" if row["builtin"] else ""
 
-        print(f"\n{status} {row['name']}")
+        # 解析任务参数
+        try:
+            params = _json.loads(row["task_params"] or "{}")
+        except Exception:
+            params = {}
+
+        if row["task_type"] == "report":
+            params_display = f"report_type={params.get('report_type', 'N/A')}"
+        elif row["task_type"] == "custom":
+            code_len = len(params.get("code", ""))
+            params_display = f"code ({code_len} 字符)"
+        else:
+            params_display = str(params)
+
+        print(f"\n{status} {row['name']}{builtin_label}")
         print(f"   描述: {row['description'] or 'N/A'}")
+        print(f"   类型: {row['task_type']} | 参数: {params_display}")
         print(f"   调度: {row['schedule_expr']} → {row['notify_channel']}")
         print(f"   最后执行: {last_run} ({last_status})")
 

@@ -1,4 +1,5 @@
 import os
+import json
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
@@ -13,7 +14,8 @@ CREATE TABLE IF NOT EXISTS tasks (
     name TEXT UNIQUE NOT NULL,
     description TEXT,
     schedule_expr TEXT NOT NULL,
-    code TEXT NOT NULL,
+    task_type TEXT NOT NULL DEFAULT 'custom',
+    task_params TEXT NOT NULL DEFAULT '{}',
     notify_channel TEXT DEFAULT 'none',
     enabled INTEGER DEFAULT 1,
     builtin INTEGER DEFAULT 0,
@@ -45,9 +47,20 @@ def _connect() -> Iterator[sqlite3.Connection]:
         conn.close()
 
 
+def _ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) -> None:
+    """确保表中存在指定列，不存在则添加（用于平滑迁移）"""
+    rows = conn.execute(f"PRAGMA table_info({table})").fetchall()
+    columns = {row["name"] for row in rows}
+    if column not in columns:
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {ddl}")
+
+
 def init_db() -> None:
     with _connect() as conn:
         conn.execute(_SCHEMA)
+        # 平滑迁移：为旧数据库添加新字段
+        _ensure_column(conn, "tasks", "task_type", "TEXT NOT NULL DEFAULT 'custom'")
+        _ensure_column(conn, "tasks", "task_params", "TEXT NOT NULL DEFAULT '{}'")
 
 
 def row_to_dict(row: sqlite3.Row | None) -> dict | None:
@@ -59,7 +72,8 @@ def row_to_dict(row: sqlite3.Row | None) -> dict | None:
 def create_task_record(
     name: str,
     schedule_expr: str,
-    code: str,
+    task_type: str,
+    task_params: dict,
     notify_channel: str,
     description: str,
     *,
@@ -67,13 +81,18 @@ def create_task_record(
     builtin: int = 0,
 ) -> dict:
     init_db()
+    params_json = json.dumps(task_params, ensure_ascii=False)
     with _connect() as conn:
         conn.execute(
             """
-            INSERT INTO tasks (name, description, schedule_expr, code, notify_channel, enabled, builtin)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO tasks (
+                name, description, schedule_expr,
+                task_type, task_params,
+                notify_channel, enabled, builtin
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (name, description, schedule_expr, code, notify_channel, enabled, builtin),
+            (name, description, schedule_expr, task_type, params_json, notify_channel, enabled, builtin),
         )
         row = conn.execute("SELECT * FROM tasks WHERE name = ?", (name,)).fetchone()
     return row_to_dict(row)
@@ -82,18 +101,24 @@ def create_task_record(
 def create_builtin_task_if_missing(
     name: str,
     schedule_expr: str,
-    code: str,
+    task_type: str,
+    task_params: dict,
     notify_channel: str,
     description: str,
 ) -> dict:
     init_db()
+    params_json = json.dumps(task_params, ensure_ascii=False)
     with _connect() as conn:
         conn.execute(
             """
-            INSERT OR IGNORE INTO tasks (name, description, schedule_expr, code, notify_channel, enabled, builtin)
-            VALUES (?, ?, ?, ?, ?, 1, 1)
+            INSERT OR IGNORE INTO tasks (
+                name, description, schedule_expr,
+                task_type, task_params,
+                notify_channel, enabled, builtin
+            )
+            VALUES (?, ?, ?, ?, ?, ?, 1, 1)
             """,
-            (name, description, schedule_expr, code, notify_channel),
+            (name, description, schedule_expr, task_type, params_json, notify_channel),
         )
         row = conn.execute("SELECT * FROM tasks WHERE name = ?", (name,)).fetchone()
     return row_to_dict(row)
@@ -109,7 +134,9 @@ def get_task_record(name: str) -> dict | None:
 def list_task_records(*, enabled_only: bool = False) -> list[dict]:
     init_db()
     query = """
-        SELECT id, name, description, schedule_expr, notify_channel, enabled, builtin,
+        SELECT id, name, description, schedule_expr,
+               task_type, task_params,
+               notify_channel, enabled, builtin,
                last_run_at, last_run_status, created_at, updated_at
         FROM tasks
     """
@@ -123,8 +150,13 @@ def list_task_records(*, enabled_only: bool = False) -> list[dict]:
 
 
 def update_task_record(name: str, **fields) -> dict | None:
-    allowed_fields = {"schedule_expr", "code", "notify_channel", "description", "enabled"}
+    allowed_fields = {"schedule_expr", "task_type", "task_params", "notify_channel", "description", "enabled"}
     updates = {key: value for key, value in fields.items() if key in allowed_fields and value is not None}
+
+    # 如果 task_params 是 dict，序列化为 JSON
+    if "task_params" in updates and isinstance(updates["task_params"], dict):
+        updates["task_params"] = json.dumps(updates["task_params"], ensure_ascii=False)
+
     if not updates:
         return get_task_record(name)
 

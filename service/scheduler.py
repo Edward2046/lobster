@@ -13,6 +13,7 @@ from service.db import (
     list_task_records,
     update_task_run_status,
 )
+from service.task_handlers import execute_task, parse_task_params
 
 log = logging.getLogger("lobster.scheduler")
 
@@ -29,51 +30,31 @@ _WEEKDAYS = (
     "sunday",
 )
 
+# 内置任务定义（结构化方式，无需手写代码）
 _BUILTIN_TASKS = [
     {
         "name": "finance",
         "schedule_expr": "every day at 09:00",
         "notify_channel": "wxpusher",
         "description": "每天 09:00 推送财经简报",
-        "code": """
-from service.reports.finance import build_report
-
-title, content = build_report()
-notification = send_notification_result(notify_channel, title, content)
-if not notification["ok"]:
-    raise RuntimeError(notification["message"])
-_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
-""".strip(),
+        "task_type": "report",
+        "task_params": {"report_type": "finance"},
     },
     {
         "name": "food",
         "schedule_expr": "every day at 09:30",
         "notify_channel": "feishu",
         "description": "每天 09:30 推送餐饮趋势简报",
-        "code": """
-from service.reports.food_trends import build_report
-
-title, content = build_report()
-notification = send_notification_result(notify_channel, title, content)
-if not notification["ok"]:
-    raise RuntimeError(notification["message"])
-_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
-""".strip(),
+        "task_type": "report",
+        "task_params": {"report_type": "food_trends"},
     },
     {
         "name": "earnings",
         "schedule_expr": "every monday at 08:00",
         "notify_channel": "wxpusher",
         "description": "每周一 08:00 推送一周财报日历",
-        "code": """
-from service.reports.earnings import build_report
-
-title, content = build_report()
-notification = send_notification_result(notify_channel, title, content)
-if not notification["ok"]:
-    raise RuntimeError(notification["message"])
-_result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
-""".strip(),
+        "task_type": "report",
+        "task_params": {"report_type": "earnings"},
     },
 ]
 
@@ -152,12 +133,8 @@ def initialize_scheduler() -> list[dict]:
     return reload_scheduled_tasks()
 
 
-def run_task_by_name(name: str) -> str:
-    task = get_task_record(name)
-    if task is None:
-        raise ValueError(f"Task '{name}' not found.")
-
-    from service.tools.code_executor_tool import execute_python_code
+def _build_execution_context(task: dict) -> dict:
+    """构建任务执行上下文（包含工具和通知函数）"""
     from service.tools.notify_tool import send_notification, send_notification_result
     from service.tools import (
         calculate,
@@ -177,31 +154,51 @@ def run_task_by_name(name: str) -> str:
         "get_earnings_calendar": get_earnings_calendar,
         "get_food_trends": get_food_trends,
         "search_web": search_web,
+        "send_notification": send_notification,
+        "send_notification_result": send_notification_result,
+        "notify_channel": task["notify_channel"],
+        "task_name": task["name"],
     }
 
-    log.info("▶ 执行任务: %s", name)
-    outcome = execute_python_code(
-        task["code"],
-        extra_globals={
-            **tool_globals,
-            "send_notification": send_notification,
-            "send_notification_result": send_notification_result,
-            "notify_channel": task["notify_channel"],
-            "task_name": task["name"],
-        },
-    )
+    return {
+        "notify_channel": task["notify_channel"],
+        "task_name": task["name"],
+        "send_notification": send_notification,
+        "send_notification_result": send_notification_result,
+        "extra_globals": tool_globals,
+    }
+
+
+def run_task_by_name(name: str) -> str:
+    task = get_task_record(name)
+    if task is None:
+        raise ValueError(f"Task '{name}' not found.")
+
+    log.info("▶ 执行任务: %s (类型: %s)", name, task.get("task_type", "custom"))
 
     timestamp = datetime.now(timezone.utc).isoformat()
-    status = "success" if outcome["success"] else "error"
-    update_task_run_status(name, last_run_at=timestamp, last_run_status=status)
+    try:
+        # 解析任务参数
+        params = parse_task_params(task.get("task_params"))
 
-    rendered = outcome["rendered"]
-    if outcome["success"]:
+        # 构建执行上下文
+        context = _build_execution_context(task)
+
+        # 通过任务处理器执行
+        result = execute_task(
+            task_type=task.get("task_type", "custom"),
+            params=params,
+            context=context,
+        )
+
+        update_task_run_status(name, last_run_at=timestamp, last_run_status="success")
         log.info("✅ 任务执行成功: %s", name)
-        return rendered or f"Task '{name}' executed successfully."
+        return result or f"Task '{name}' executed successfully."
 
-    log.error("❌ 任务执行失败: %s", name)
-    return rendered or f"Task '{name}' failed."
+    except Exception as e:
+        update_task_run_status(name, last_run_at=timestamp, last_run_status="error")
+        log.error("❌ 任务执行失败: %s, 错误: %s", name, e)
+        return f"Task '{name}' failed: {e}"
 
 
 def run_scheduler_loop(sleep_seconds: int = 30) -> None:
