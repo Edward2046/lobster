@@ -119,7 +119,7 @@ def send_alert(
     # 发送到飞书
     if "飞书" in channels:
         try:
-            from service.cron.notify import send_feishu
+            from service.notifications import send_feishu
             if send_feishu(title, formatted_message):
                 results.append("✅ 飞书")
                 success_count += 1
@@ -131,7 +131,7 @@ def send_alert(
     # 发送到微信
     if "微信" in channels:
         try:
-            from service.cron.notify import send_wxpusher
+            from service.notifications import send_wxpusher
             if send_wxpusher(title, formatted_message):
                 results.append("✅ 微信")
                 success_count += 1

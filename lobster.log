@@ -452,3 +452,264 @@ LiteLLM completion() model= deepseek-reasoner; provider = deepseek
 2026-06-02 08:14:31 [ERROR] ❌ 任务执行失败: monitor-cpu-memory
 2026-06-02 08:19:31 [INFO] ▶ 执行任务: monitor-cpu-memory
 2026-06-02 08:19:31 [ERROR] ❌ 任务执行失败: monitor-cpu-memory
+[2026-06-02 10:57:15] Starting backend...
+2026-06-02 10:57:15 [INFO] 🦞 Lobster 启动
+2026-06-02 10:57:15 [INFO] ⏰ 调度器启动
+2026-06-02 10:57:15 [INFO]    earnings: every monday at 08:00 → wxpusher
+2026-06-02 10:57:15 [INFO]    finance: every day at 09:00 → wxpusher
+2026-06-02 10:57:15 [INFO]    food: every day at 09:30 → feishu
+2026-06-02 10:57:15 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-02 10:57:16] Backend started in background with PID 37145.
+[2026-06-02 10:57:16] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+sh: vite: command not found
+[2026-06-02 10:57:47] Frontend did not become ready within 30 seconds.
+[2026-06-02 11:02:52] Frontend is already stopped.
+[2026-06-02 11:02:52] Stopping Backend (PID 37145)...
+[2026-06-02 11:02:53] Backend stopped.
+[2026-06-02 11:02:58] Starting backend...
+2026-06-02 11:02:58 [INFO] 🦞 Lobster 启动
+2026-06-02 11:02:59 [INFO] ⏰ 调度器启动
+2026-06-02 11:02:59 [INFO]    earnings: every monday at 08:00 → wxpusher
+2026-06-02 11:02:59 [INFO]    finance: every day at 09:00 → wxpusher
+2026-06-02 11:02:59 [INFO]    food: every day at 09:30 → feishu
+2026-06-02 11:02:59 [INFO] 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-02 11:02:59] Backend started in background with PID 38154.
+[2026-06-02 11:02:59] Starting frontend...
+
+> lobster-web@0.1.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 672 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://10.19.64.110:5173/
+[2026-06-02 11:03:02] Frontend started in background with PID 38172.
+[2026-06-02 11:03:02] Lobster is running in the background. Logs are being appended to lobster.log.
+2026-06-02 11:10:49 [INFO] 收到问题: 你好
+2026-06-02 11:10:52 [INFO] Agent 初始化完成
+[92m11:10:52 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:10:52 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:10:55 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:10:55 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:11:37 [INFO] 收到问题: 帮我查询截止当前最新的财经资讯
+[92m11:11:37 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:11:37 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:11:40 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:11:40 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:11:40 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:11:40 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:11:44 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:11:44 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:12:33 [INFO] 收到问题: 以上10条在哪儿呢？
+[92m11:12:34 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:12:34 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:12:39 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:12:39 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:12:39 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:12:39 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:12:43 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:12:43 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:12:43 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:12:43 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:12:47 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:12:47 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:13:47 [INFO] 收到问题: 为什么刚刚没显示出来呢？
+[92m11:13:47 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:13:47 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:13:53 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:13:53 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:15:33 [INFO] 收到问题: 请检查下当前机器的性能情况
+[92m11:15:33 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:15:33 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:15:35 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:15:35 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:15:36 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:15:36 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:15:41 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:15:41 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:15:41 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:15:41 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:15:45 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:15:45 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:16:39 [INFO] 收到问题: 暂时不需要，清查下这周发财报的美股和港股科技公司
+[92m11:16:39 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:16:39 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:16:46 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:16:46 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:17:09 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:17:09 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:17:13 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:17:13 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:17:13 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:17:13 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:17:19 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:17:19 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:17:20 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:17:20 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:17:29 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:17:29 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:17:36 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:17:36 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:17:43 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:17:43 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:17:53 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:17:53 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:18:00 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:18:00 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:18:31 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:18:31 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:18:43 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:18:43 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:18:43 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:18:43 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:18:54 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:18:54 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:22:16 [INFO] 收到问题: 这个格式不错，请设置一个定时任务按照这个格式每天9:15微信通知我，非财报季无需通知，重点在5-6月，8~9月，11~12月，2~3月
+[92m11:22:16 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:22:16 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:22:29 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:22:29 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:22:46 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:22:46 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:22:54 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:22:54 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:22:54 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:22:54 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:23:01 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:23:01 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:23:36 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:23:36 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:05 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:05 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:24:05 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:24:05 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:06 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:06 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:24:06 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:24:06 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:07 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:07 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:24:07 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:24:07 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:09 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:09 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:09 [INFO] ▶ 执行任务: earnings-report-daily
+2026-06-02 11:24:26 [INFO] ✅ 任务执行成功: earnings-report-daily
+[92m11:24:26 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:24:26 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:30 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:30 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:24:30 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:24:30 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:24:33 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:24:33 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:00 [INFO] 收到问题: 好的，我当前有几个定时任务了？
+[92m11:25:00 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:00 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:02 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:02 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:25:02 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:02 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:05 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:05 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:25:05 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:05 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:09 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:09 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:25:09 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:09 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:13 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:13 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:48 [INFO] 收到问题: 这些定时任务存在哪儿呢？
+[92m11:25:48 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:48 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:52 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:52 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:25:52 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:25:52 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:25:54 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:25:54 [INFO] Wrapper: Completed Call, calling success_handler
+2026-06-02 11:26:22 [INFO] 收到问题: 那c'r'a'n
+[92m11:26:22 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:26:22 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:26:25 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:26:25 [INFO] Wrapper: Completed Call, calling success_handler
+[92m11:26:25 - LiteLLM:INFO[0m: utils.py:4054 - 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+2026-06-02 11:26:25 [INFO] 
+LiteLLM completion() model= deepseek-reasoner; provider = deepseek
+[92m11:26:28 - LiteLLM:INFO[0m: utils.py:1656 - Wrapper: Completed Call, calling success_handler
+2026-06-02 11:26:28 [INFO] Wrapper: Completed Call, calling success_handler

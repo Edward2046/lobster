@@ -1,16 +1,9 @@
-#!/usr/bin/env python3
-# cron/daily_food_trends.py — 每天 09:30 推送餐饮趋势简报到飞书
-#
-# crontab 配置：
-#   30 9 * * * cd /Users/libing/workplaza/lobster && python cron/daily_food_trends.py
+# reports/food_trends.py — 餐饮趋势简报生成模块
 
-import sys
 import os
-
 from datetime import date
 from openai import OpenAI
 from service.tools.food_trends_tool import get_food_trends
-from service.cron.notify import send_feishu
 
 _client = OpenAI(
     api_key=os.environ["DEEPSEEK_API_KEY"],
@@ -86,20 +79,3 @@ def build_report() -> tuple[str, str]:
     raw_data = _collect_raw_data()
     content  = _generate_report(raw_data)
     return title, content
-
-
-if __name__ == "__main__":
-    print("正在生成餐饮趋势简报...")
-    title, content = build_report()
-
-    print(f"\n{title}")
-    print("=" * 40)
-    print(content)
-    print("=" * 40)
-
-    ok = send_feishu(title, content)
-    if ok:
-        print("✅ 餐饮趋势简报已推送到飞书")
-    else:
-        print("❌ 推送失败")
-        sys.exit(1)

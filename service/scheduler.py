@@ -36,7 +36,7 @@ _BUILTIN_TASKS = [
         "notify_channel": "wxpusher",
         "description": "每天 09:00 推送财经简报",
         "code": """
-from service.cron.daily_finance import build_report
+from service.reports.finance import build_report
 
 title, content = build_report()
 notification = send_notification_result(notify_channel, title, content)
@@ -51,7 +51,7 @@ _result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
         "notify_channel": "feishu",
         "description": "每天 09:30 推送餐饮趋势简报",
         "code": """
-from service.cron.daily_food_trends import build_report
+from service.reports.food_trends import build_report
 
 title, content = build_report()
 notification = send_notification_result(notify_channel, title, content)
@@ -66,7 +66,7 @@ _result = f"{notification['message']}\\n\\n{title}\\n\\n{content}"
         "notify_channel": "wxpusher",
         "description": "每周一 08:00 推送一周财报日历",
         "code": """
-from service.cron.weekly_earnings import build_report
+from service.reports.earnings import build_report
 
 title, content = build_report()
 notification = send_notification_result(notify_channel, title, content)

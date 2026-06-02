@@ -1,15 +1,7 @@
-#!/usr/bin/env python3
-# cron/daily_finance.py — 每天 09:00 推送财经简报到微信
-#
-# crontab 配置：
-#   0 9 * * * cd /Users/libing/workplaza/lobster && python cron/daily_finance.py
-
-import sys
-import os
+# reports/finance.py — 财经简报生成模块
 
 from datetime import date
 from service.tools.investing_news_tool import get_investing_news
-from service.cron.notify import send_wxpusher
 
 
 def build_report() -> tuple[str, str]:
@@ -32,16 +24,3 @@ def build_report() -> tuple[str, str]:
 
     content = f"{title}\n{'='*40}\n\n" + "\n\n".join(sections)
     return title, content
-
-
-if __name__ == "__main__":
-    print("正在生成财经简报...")
-    title, content = build_report()
-    print(content[:200], "...")
-
-    ok = send_wxpusher(title, content)
-    if ok:
-        print("✅ 财经简报已推送到微信")
-    else:
-        print("❌ 推送失败")
-        sys.exit(1)

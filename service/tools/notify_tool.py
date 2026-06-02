@@ -2,7 +2,7 @@
 
 from smolagents import tool
 
-from service.cron.notify import send_feishu, send_wxpusher
+from service.notifications import send_feishu, send_wxpusher
 
 
 def send_notification_result(channel: str, title: str, content: str) -> dict:
