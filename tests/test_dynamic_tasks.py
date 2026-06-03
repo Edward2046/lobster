@@ -3,8 +3,13 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from service.db import get_task_record, list_task_records
-from service.scheduler import initialize_scheduler, parse_schedule_expr, scheduler
+from service.scheduler import (
+    get_task_record,
+    initialize_scheduler,
+    list_task_records,
+    parse_schedule_expr,
+    scheduler,
+)
 from service.tools.task_manager_tool import create_task, delete_task, list_tasks, run_task_now, update_task
 
 
@@ -22,7 +27,7 @@ class DynamicTaskTests(unittest.TestCase):
     def test_initialize_scheduler_seeds_builtin_tasks(self):
         tasks = initialize_scheduler()
         builtin_names = {task["name"] for task in tasks if task["builtin"]}
-        self.assertEqual(builtin_names, {"finance", "food", "earnings"})
+        self.assertEqual(builtin_names, {"finance", "food", "earnings", "tech_news"})
 
     def test_parse_schedule_expr_supports_required_formats(self):
         self.assertEqual(parse_schedule_expr("every day at 09:00"), ("daily", "09:00"))
@@ -32,11 +37,12 @@ class DynamicTaskTests(unittest.TestCase):
 
     def test_task_lifecycle(self):
         create_task(
-            "demo-task",
-            "every 30 minutes",
-            "print('hello from task')\n_result = 42",
-            "none",
-            "demo task",
+            name="demo-task",
+            schedule_expr="every 30 minutes",
+            notify_channel="none",
+            description="demo task",
+            task_type="custom",
+            task_params='{"code": "print(\\"hello from task\\")\\n_result = 42"}',
         )
 
         rendered_list = list_tasks()
@@ -61,7 +67,14 @@ class DynamicTaskTests(unittest.TestCase):
         self.assertNotIn("demo-task", remaining_names)
 
     def test_run_task_injects_tool_globals(self):
-        create_task("tool-task", "every hour", "_result = search_web('latest ai news')", "feishu", "tool globals")
+        create_task(
+            name="tool-task",
+            schedule_expr="every hour",
+            notify_channel="feishu",
+            description="tool globals",
+            task_type="custom",
+            task_params='{"code": "_result = search_web(\\"latest ai news\\")"}',
+        )
 
         with patch(
             "service.tools.code_executor_tool.execute_python_code",

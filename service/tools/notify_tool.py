@@ -5,12 +5,12 @@ from smolagents import tool
 from service.notifications import send_feishu, send_wxpusher
 
 
-def send_notification_result(channel: str, title: str, content: str) -> dict:
+def send_notification_result(channel: str, title: str, content: str, *, markdown: bool = False) -> dict:
     channel = channel.strip().lower()
     if channel == "none":
         return {"ok": True, "message": "Notification skipped because channel is 'none'."}
     if channel == "wxpusher":
-        ok = send_wxpusher(title, content)
+        ok = send_wxpusher(title, content, content_type=3 if markdown else 1)
         return {"ok": ok, "message": "WxPusher notification sent." if ok else "WxPusher notification failed."}
     if channel == "feishu":
         ok = send_feishu(title, content)

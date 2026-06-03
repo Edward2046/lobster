@@ -6,10 +6,12 @@ from datetime import datetime, timedelta
 from collections import Counter
 from smolagents import tool
 
+from config import settings
+
 
 @tool
 def analyze_logs(
-    log_file: str = "lobster.log",
+    log_file: str = "",
     hours: int = 24,
     keyword: str = "",
     error_only: bool = False
@@ -19,7 +21,8 @@ def analyze_logs(
     Use this to quickly diagnose issues by examining recent log entries.
 
     Args:
-        log_file: Path to log file (default: "lobster.log")
+        log_file: Path to log file. Empty string uses the configured default
+                  (settings.log.LOG_FILE, e.g. logs/lobster.log).
         hours: Analyze logs from the last N hours (default: 24)
         keyword: Optional keyword to filter logs (e.g., "timeout", "failed")
         error_only: If True, only show ERROR and CRITICAL level logs
@@ -27,9 +30,9 @@ def analyze_logs(
     Returns:
         Analysis report including error counts, recent errors, and log statistics.
     """
-    log_path = Path(log_file)
+    log_path = Path(log_file) if log_file else Path(settings.log.LOG_FILE)
     if not log_path.exists():
-        return f"日志文件不存在: {log_file}"
+        return f"日志文件不存在: {log_path}"
 
     # 检查日志文件大小
     file_size_mb = log_path.stat().st_size / (1024 ** 2)
@@ -38,7 +41,7 @@ def analyze_logs(
     else:
         size_warning = f"日志文件大小: {file_size_mb:.2f} MB"
 
-    lines = [f"=== 日志分析报告 ({log_file}) ===\n"]
+    lines = [f"=== 日志分析报告 ({log_path}) ===\n"]
     lines.append(size_warning)
     lines.append("")
 

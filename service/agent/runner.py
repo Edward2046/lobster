@@ -34,8 +34,8 @@ import sys
 import os
 from dotenv import load_dotenv
 from smolagents import CodeAgent, LiteLLMModel
-from service.brain import LobsterBrain
-from service.agent_prompt import get_prompt_templates
+from service.agent.brain import LobsterBrain
+from service.agent.prompt import get_prompt_templates
 from service.tools import (
     get_current_time,
     calculate,

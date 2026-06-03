@@ -145,6 +145,7 @@ class LogSettings:
         )
     )
     LOG_DATE_FORMAT: str = field(default_factory=lambda: _get_str("LOG_DATE_FORMAT", "%Y-%m-%d %H:%M:%S"))
+    BACKUP_DAYS: int = field(default_factory=lambda: _get_int("LOG_BACKUP_DAYS", 14))
 
 
 @dataclass

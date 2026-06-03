@@ -13,7 +13,7 @@ import re
 from dataclasses import dataclass
 from typing import Callable, Optional
 
-from service.memory import MemoryManager, get_memory_manager
+from service.memory.manager import MemoryManager, get_memory_manager
 
 
 Runner = Callable[[str], object]

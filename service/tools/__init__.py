@@ -4,6 +4,7 @@ from service.tools.weather_tool import get_weather
 from service.tools.investing_news_tool import get_investing_news
 from service.tools.earnings_calendar_tool import get_earnings_calendar
 from service.tools.food_trends_tool import get_food_trends
+from service.tools.tech_news_tool import get_tech_news
 from service.tools.memory_tool import (
     search_memory,
     remember_fact,
@@ -34,6 +35,7 @@ __all__ = [
     "get_investing_news",
     "get_earnings_calendar",
     "get_food_trends",
+    "get_tech_news",
     "search_memory",
     "remember_fact",
     "recall_fact",

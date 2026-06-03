@@ -44,6 +44,16 @@ _SOURCES = {
     ],
     "china": [
         {
+            "url": "https://36kr.com/feed-newsflash",
+            "label": "36氪快讯（餐饮过滤）",
+            "filtered": True,
+        },
+        {
+            "url": "https://www.tmtpost.com/rss.xml",
+            "label": "钛媒体（餐饮过滤）",
+            "filtered": True,
+        },
+        {
             "url": "https://www.thebeijinger.com/rss.xml",
             "label": "The Beijinger（北京）",
             "filtered": True,
@@ -69,12 +79,18 @@ _SOURCES = {
 }
 
 # 餐饮相关关键词，用于过滤综合类媒体的文章
+# 注意：避免使用单字关键词（如「茶」「酒」「奶」），这类词容易在综合财经新闻里误匹配
+# （比如「贵州茅台」会命中「酒」）。中文用复合词或具体品牌名。
 _FOOD_KEYWORDS = re.compile(
-    r"food|restaurant|cafe|coffee|tea|drink|bar|dining|cuisine|chef|menu|"
+    r"food|restaurant|cafe|coffee|tea\b|drink|bar|dining|cuisine|chef|menu|"
     r"ramen|sushi|bbq|hotpot|noodle|dumpling|bubble tea|milk tea|snack|"
     r"bakery|dessert|pizza|burger|steak|seafood|vegan|brunch|lunch|dinner|"
     r"michelin|opening|closes|pop.?up|delivery|takeaway|takeout|"
-    r"餐|饮|食|菜|厨|咖啡|茶|酒|奶|甜|烤|火锅|拉面|寿司|小吃|外卖|开业|闭店",
+    r"餐饮|餐厅|外卖|连锁|加盟|预制菜|饮品|奶茶|咖啡|火锅|烧烤|烤肉|拉面|寿司|"
+    r"小吃|甜品|烘焙|轻食|茶饮|酒馆|快餐|网红店|开业|闭店|首店|新店|门店|"
+    r"喜茶|瑞幸|霸王茶姬|蜜雪冰城|星巴克|海底捞|西贝|肯德基|麦当劳|塔斯汀|奈雪|"
+    r"古茗|沪上阿姨|茶颜悦色|百胜|九毛九|呷哺|湊湊|半天妖|绝味|周黑鸭|蜀大侠|"
+    r"米其林|黑珍珠|大众点评|小红书",
     re.IGNORECASE,
 )
 
@@ -107,17 +123,20 @@ def _is_food_related(item: ET.Element) -> bool:
 
 
 def _format_items(items: list[ET.Element], limit: int, filtered: bool) -> list[str]:
-    """将 item 列表格式化为标题行，filtered=True 时先过滤。只返回标题，不带链接。"""
+    """将 item 列表格式化为标题行，filtered=True 时先过滤。带链接以便 LLM 在简报中引用。"""
     if filtered:
         items = [i for i in items if _is_food_related(i)]
     lines = []
     for item in items[:limit]:
         title    = (item.findtext("title")   or "").strip()
+        link     = (item.findtext("link")    or "").strip()
         pubdate  = (item.findtext("pubDate") or "").strip()
         date_short = pubdate[:16] if pubdate else ""
         line = f"• {title}"
         if date_short:
             line += f"  [{date_short}]"
+        if link:
+            line += f"\n  链接：{link}"
         lines.append(line)
     return lines
 

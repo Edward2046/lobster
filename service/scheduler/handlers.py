@@ -33,6 +33,8 @@ def execute_report_task(params: dict, context: dict) -> str:
         from service.reports.food_trends import build_report
     elif report_type == "earnings":
         from service.reports.earnings import build_report
+    elif report_type == "tech_news":
+        from service.reports.tech_news import build_report
     else:
         raise ValueError(f"Unknown report_type: {report_type}")
 
@@ -40,7 +42,12 @@ def execute_report_task(params: dict, context: dict) -> str:
     notify_channel = context["notify_channel"]
     send_notification_result = context["send_notification_result"]
 
-    notification = send_notification_result(notify_channel, title, content)
+    notification = send_notification_result(
+        notify_channel,
+        title,
+        content,
+        markdown=bool(params.get("markdown", False)),
+    )
     if not notification["ok"]:
         raise RuntimeError(notification["message"])
 

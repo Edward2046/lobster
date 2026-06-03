@@ -6,19 +6,23 @@ import sqlite3
 
 from smolagents import tool
 
-from service.db import (
+from service.scheduler import (
     create_task_record,
     delete_task_record,
     get_task_record,
+    initialize_scheduler,
     list_task_records,
+    parse_schedule_expr,
+    register_task,
+    run_task_by_name,
+    unregister_task,
     update_task_record,
 )
-from service.scheduler import initialize_scheduler, parse_schedule_expr, register_task, run_task_by_name, unregister_task
 
 _TASK_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _ALLOWED_CHANNELS = {"wxpusher", "feishu", "none"}
 _ALLOWED_TASK_TYPES = {"report", "custom"}
-_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings"}
+_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings", "tech_news"}
 
 
 def _validate_task_name(name: str) -> str:

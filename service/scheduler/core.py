@@ -6,14 +6,14 @@ from datetime import datetime, timezone
 
 import schedule
 
-from service.db import (
+from service.scheduler.db import (
     create_builtin_task_if_missing,
     get_task_record,
     init_db,
     list_task_records,
     update_task_run_status,
 )
-from service.task_handlers import execute_task, parse_task_params
+from service.scheduler.handlers import execute_task, parse_task_params
 
 log = logging.getLogger("lobster.scheduler")
 
@@ -43,10 +43,10 @@ _BUILTIN_TASKS = [
     {
         "name": "food",
         "schedule_expr": "every day at 09:30",
-        "notify_channel": "feishu",
+        "notify_channel": "wxpusher",
         "description": "每天 09:30 推送餐饮趋势简报",
         "task_type": "report",
-        "task_params": {"report_type": "food_trends"},
+        "task_params": {"report_type": "food_trends", "markdown": True},
     },
     {
         "name": "earnings",
@@ -55,6 +55,14 @@ _BUILTIN_TASKS = [
         "description": "每周一 08:00 推送一周财报日历",
         "task_type": "report",
         "task_params": {"report_type": "earnings"},
+    },
+    {
+        "name": "tech_news",
+        "schedule_expr": "every day at 09:00",
+        "notify_channel": "wxpusher",
+        "description": "每天 09:00 聚合科技资讯并由 LLM 提炼影响美股的重磅信息",
+        "task_type": "report",
+        "task_params": {"report_type": "tech_news", "markdown": True},
     },
 ]
 

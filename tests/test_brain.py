@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from service.brain import LobsterBrain
+from service.agent import LobsterBrain
 from service.memory import MemoryManager
 
 

@@ -24,19 +24,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config import settings
-from service.db import get_task_record
-from service.scheduler import initialize_scheduler, run_scheduler_loop, run_task_by_name
+from service.log_setup import setup_logging
+from service.scheduler import (
+    get_task_record,
+    initialize_scheduler,
+    run_scheduler_loop,
+    run_task_by_name,
+)
 
 # ── 日志配置 ──────────────────────────────────────────────────────────────────
-logging.basicConfig(
-    level=getattr(logging, settings.log.LOG_LEVEL.upper(), logging.INFO),
-    format=settings.log.LOG_FORMAT,
-    datefmt=settings.log.LOG_DATE_FORMAT,
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler(settings.log.LOG_FILE, encoding="utf-8"),
-    ],
-)
+setup_logging()
 log = logging.getLogger("lobster")
 
 
@@ -51,7 +48,7 @@ def run_scheduler():
 
 # ── 入口 ──────────────────────────────────────────────────────────────────────
 
-_BUILTIN_TASKS = ("finance", "food", "earnings")
+_BUILTIN_TASKS = ("finance", "food", "earnings", "tech_news")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lobster — 财经 & 餐饮日报调度器 + Agent 服务")

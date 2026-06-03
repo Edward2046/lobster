@@ -4,12 +4,17 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-LOG_FILE="$ROOT_DIR/logs/lobster.log"
+LOG_DIR="$ROOT_DIR/logs"
+LOG_FILE="$LOG_DIR/lobster.log"
+BACKEND_LOG="$LOG_DIR/backend.log"
+FRONTEND_LOG="$LOG_DIR/frontend.log"
 BACKEND_PID_FILE="$ROOT_DIR/.lobster-backend.pid"
 FRONTEND_PID_FILE="$ROOT_DIR/.lobster-frontend.pid"
 BACKEND_HEALTH_URL="http://127.0.0.1:8765/health"
 FRONTEND_URL="http://127.0.0.1:5173"
 ACTION="${1:-start}"
+
+mkdir -p "$LOG_DIR"
 
 log() {
   local message="$1"
@@ -117,7 +122,7 @@ start_backend() {
   log "Starting backend..."
   (
     cd "$ROOT_DIR"
-    nohup python main.py >/dev/null 2>>"$LOG_FILE" &
+    nohup python main.py >>"$BACKEND_LOG" 2>&1 &
     backend_pid=$!
     write_pid_file "$BACKEND_PID_FILE" "$backend_pid"
   )
@@ -156,7 +161,7 @@ start_frontend() {
   log "Starting frontend..."
   (
     cd "$ROOT_DIR/web"
-    nohup npm run dev -- --host 0.0.0.0 >>"$LOG_FILE" 2>&1 &
+    nohup npm run dev -- --host 0.0.0.0 >>"$FRONTEND_LOG" 2>&1 &
     frontend_pid=$!
     write_pid_file "$FRONTEND_PID_FILE" "$frontend_pid"
   )
@@ -179,7 +184,7 @@ start_all() {
   touch "$LOG_FILE"
   start_backend
   start_frontend
-  log "Lobster is running in the background. Logs are being appended to lobster.log."
+  log "Lobster is running. Logs: lobster.log (script) / backend.log / frontend.log under logs/."
 }
 
 stop_all() {

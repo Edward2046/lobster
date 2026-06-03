@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 import uvicorn
-from service.brain import LobsterBrain
+from service.agent import LobsterBrain
 from config import settings
 
 log = logging.getLogger("lobster.server")
@@ -33,10 +33,10 @@ def get_agent():
     with _agent_lock:
         if _agent is None:
             from smolagents import CodeAgent, LiteLLMModel
-            from service.agent_prompt import get_prompt_templates
+            from service.agent import get_prompt_templates
             from service.tools import (
                 get_current_time, calculate, get_weather,
-                get_investing_news, get_earnings_calendar, get_food_trends,
+                get_investing_news, get_earnings_calendar, get_food_trends, get_tech_news,
                 search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
                 create_goal, list_active_goals, complete_goal, review_recent_reflections,
                 create_task, list_tasks, delete_task, run_task_now, update_task,
@@ -55,7 +55,7 @@ def get_agent():
             _agent = CodeAgent(
                 tools=[
                     get_current_time, calculate, get_weather,
-                    get_investing_news, get_earnings_calendar, get_food_trends,
+                    get_investing_news, get_earnings_calendar, get_food_trends, get_tech_news,
                     search_memory, remember_fact, recall_fact, list_all_facts, forget_fact,
                     create_goal, list_active_goals, complete_goal, review_recent_reflections,
                     create_task, list_tasks, delete_task, run_task_now, update_task,
