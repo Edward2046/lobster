@@ -27,6 +27,7 @@ class DynamicTaskTests(unittest.TestCase):
     def test_initialize_scheduler_seeds_builtin_tasks(self):
         tasks = initialize_scheduler()
         builtin_names = {task["name"] for task in tasks if task["builtin"]}
+        # log_monitor_example 默认禁用，不会出现在 enabled-only 列表中
         self.assertEqual(builtin_names, {"finance", "food", "earnings", "tech_news"})
 
     def test_parse_schedule_expr_supports_required_formats(self):

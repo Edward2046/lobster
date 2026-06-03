@@ -27,6 +27,7 @@ from service.tools.alert_tool import send_alert, list_recent_alerts
 from service.tools.database_health_tool import check_database_health
 from service.tools.diagnostics_tool import run_diagnostics
 from service.tools.container_monitor_tool import get_container_metrics, get_container_logs
+from service.tools.es_log_monitor_tool import query_app_error_logs
 
 __all__ = [
     "get_current_time",
@@ -62,4 +63,5 @@ __all__ = [
     "run_diagnostics",
     "get_container_metrics",
     "get_container_logs",
+    "query_app_error_logs",
 ]

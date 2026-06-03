@@ -22,7 +22,7 @@ from service.scheduler import (
 _TASK_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _ALLOWED_CHANNELS = {"wxpusher", "feishu", "none"}
 _ALLOWED_TASK_TYPES = {"report", "custom"}
-_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings", "tech_news"}
+_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings", "tech_news", "log_monitor"}
 
 
 def _validate_task_name(name: str) -> str:
@@ -54,6 +54,8 @@ def _validate_task_params(task_type: str, params: dict) -> dict:
             raise ValueError("Report task requires 'report_type' in task_params.")
         if report_type not in _ALLOWED_REPORT_TYPES:
             raise ValueError(f"report_type must be one of: {', '.join(_ALLOWED_REPORT_TYPES)}.")
+        if report_type == "log_monitor" and not params.get("app_id"):
+            raise ValueError("log_monitor report requires 'app_id' in task_params.")
     elif task_type == "custom":
         if not params.get("code"):
             raise ValueError("Custom task requires 'code' in task_params.")

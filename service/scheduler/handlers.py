@@ -13,7 +13,7 @@ from typing import Any
 
 
 def execute_report_task(params: dict, context: dict) -> str:
-    """执行报告类任务（财经/餐饮/财报）
+    """执行报告类任务（财经/餐饮/财报/科技/日志监控）
 
     Args:
         params: 任务参数，包含 report_type
@@ -35,10 +35,19 @@ def execute_report_task(params: dict, context: dict) -> str:
         from service.reports.earnings import build_report
     elif report_type == "tech_news":
         from service.reports.tech_news import build_report
+    elif report_type == "log_monitor":
+        from service.reports.log_monitor import build_report
     else:
         raise ValueError(f"Unknown report_type: {report_type}")
 
-    title, content = build_report()
+    # log_monitor 需要 params 才能拿到 app_id/阈值；其他 report 暂不需要
+    if report_type == "log_monitor":
+        title, content = build_report(params)
+        if title is None or content is None:
+            return f"log_monitor: app_id={params.get('app_id')} 未触发告警，跳过推送。"
+    else:
+        title, content = build_report()
+
     notify_channel = context["notify_channel"]
     send_notification_result = context["send_notification_result"]
 

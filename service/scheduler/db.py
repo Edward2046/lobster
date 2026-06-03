@@ -107,6 +107,7 @@ def create_builtin_task_if_missing(
     task_params: dict,
     notify_channel: str,
     description: str,
+    enabled: int = 1,
 ) -> dict:
     init_db()
     params_json = json.dumps(task_params, ensure_ascii=False)
@@ -118,9 +119,9 @@ def create_builtin_task_if_missing(
                 task_type, task_params,
                 notify_channel, enabled, builtin
             )
-            VALUES (?, ?, ?, ?, ?, ?, 1, 1)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 1)
             """,
-            (name, description, schedule_expr, task_type, params_json, notify_channel),
+            (name, description, schedule_expr, task_type, params_json, notify_channel, enabled),
         )
         row = conn.execute("SELECT * FROM tasks WHERE name = ?", (name,)).fetchone()
     return row_to_dict(row)

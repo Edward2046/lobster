@@ -64,6 +64,21 @@ _BUILTIN_TASKS = [
         "task_type": "report",
         "task_params": {"report_type": "tech_news", "markdown": True},
     },
+    {
+        # 示例：每 5 分钟监控 payment-gateway 错误日志，命中阈值/突增时推飞书
+        # 默认禁用，使用前请改 app_id 并 update_task 开启
+        "name": "log_monitor_example",
+        "schedule_expr": "every 5 minutes",
+        "notify_channel": "feishu",
+        "description": "示例：5 分钟错误日志监控（默认禁用，需改 app_id 后启用）",
+        "task_type": "report",
+        "task_params": {
+            "report_type": "log_monitor",
+            "app_id": "payment-gateway",
+            "markdown": True,
+        },
+        "enabled": 0,
+    },
 ]
 
 

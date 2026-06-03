@@ -133,6 +133,34 @@ class ToolSettings:
 
 
 @dataclass
+class ESSettings:
+    """Elasticsearch 日志查询配置"""
+    BASE_URL: str = field(default_factory=lambda: _get_str("ES_BASE_URL", "http://localhost:9200"))
+    # 索引模板，{app_id} 会被替换；支持通配符
+    INDEX_PATTERN: str = field(default_factory=lambda: _get_str("ES_INDEX_PATTERN", "logs-{app_id}-*"))
+    USERNAME: Optional[str] = field(default_factory=lambda: os.environ.get("ES_USERNAME"))
+    PASSWORD: Optional[str] = field(default_factory=lambda: os.environ.get("ES_PASSWORD"))
+    API_KEY: Optional[str] = field(default_factory=lambda: os.environ.get("ES_API_KEY"))
+    TIMEOUT: int = field(default_factory=lambda: _get_int("ES_TIMEOUT", 10))
+    # 错误等级关键字段名（不同 ELK 配置可能叫 level / log.level / severity）
+    LEVEL_FIELD: str = field(default_factory=lambda: _get_str("ES_LEVEL_FIELD", "level"))
+    APP_FIELD: str = field(default_factory=lambda: _get_str("ES_APP_FIELD", "app_id"))
+    MESSAGE_FIELD: str = field(default_factory=lambda: _get_str("ES_MESSAGE_FIELD", "message"))
+    TIMESTAMP_FIELD: str = field(default_factory=lambda: _get_str("ES_TIMESTAMP_FIELD", "@timestamp"))
+
+
+@dataclass
+class LogMonitorSettings:
+    """日志监控告警阈值"""
+    WINDOW_MINUTES: int = field(default_factory=lambda: _get_int("LOG_MONITOR_WINDOW_MINUTES", 5))
+    BASELINE_WINDOWS: int = field(default_factory=lambda: _get_int("LOG_MONITOR_BASELINE_WINDOWS", 12))  # 取过去 N 个窗口作为基线
+    ABS_THRESHOLD: int = field(default_factory=lambda: _get_int("LOG_MONITOR_ABS_THRESHOLD", 50))       # 绝对阈值
+    SPIKE_RATIO: float = field(default_factory=lambda: _get_float("LOG_MONITOR_SPIKE_RATIO", 3.0))      # 突增倍数
+    MIN_BASELINE_COUNT: int = field(default_factory=lambda: _get_int("LOG_MONITOR_MIN_BASELINE", 5))   # 突增告警的最小当前量
+    SAMPLE_SIZE: int = field(default_factory=lambda: _get_int("LOG_MONITOR_SAMPLE_SIZE", 5))           # 告警附带样例条数
+
+
+@dataclass
 class LogSettings:
     """日志配置"""
     LOG_DIR: Path = field(default_factory=lambda: LOGS_DIR)
@@ -161,6 +189,8 @@ class Settings:
     notification: NotificationSettings = field(default_factory=NotificationSettings)
     tool: ToolSettings = field(default_factory=ToolSettings)
     log: LogSettings = field(default_factory=LogSettings)
+    es: ESSettings = field(default_factory=ESSettings)
+    log_monitor: LogMonitorSettings = field(default_factory=LogMonitorSettings)
 
     PROJECT_ROOT: Path = field(default=PROJECT_ROOT)
     DATA_DIR: Path = field(default=DATA_DIR)
