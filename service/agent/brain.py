@@ -58,13 +58,26 @@ class StreamEvent:
 
 
 class LobsterBrain:
+    # 简单意图：用轻量模型 + 精简上下文
+    FAST_INTENTS: frozenset[str] = frozenset({"qa", "analysis"})
+
     def __init__(self, memory_manager: Optional[MemoryManager] = None):
         self.memory = memory_manager or get_memory_manager()
 
-    def answer(self, question: str, runner: Runner, *, session_id: str | None = None) -> str:
+    def answer(
+        self,
+        question: str,
+        runner: Runner,
+        fast_runner: Runner | None = None,
+        *,
+        session_id: str | None = None,
+    ) -> str:
         prepared = self.prepare(question)
+        effective_runner = (
+            fast_runner if (fast_runner and prepared.intent in self.FAST_INTENTS) else runner
+        )
         try:
-            answer = str(runner(prepared.prompt))
+            answer = str(effective_runner(prepared.prompt))
         except Exception as exc:
             # 兜底：如果是 CodeAgent 格式解析错误（AgentParsingError），
             # 尝试从错误信息里提取模型原始输出文本，避免把有效答案当错误抛出。
@@ -116,6 +129,7 @@ class LobsterBrain:
         self,
         question: str,
         stream_runner: StreamRunner,
+        fast_stream_runner: StreamRunner | None = None,
         *,
         session_id: str | None = None,
     ) -> Iterator[StreamEvent]:
@@ -123,13 +137,19 @@ class LobsterBrain:
 
         stream_runner(prompt) 应返回一个迭代器，元素来自 smolagents
         agent.run(stream=True)：ActionStep / PlanningStep / FinalAnswerStep。
+        fast_stream_runner 用于简单意图，对应轻量模型。
         """
         prepared = self.prepare(question)
+        effective_runner = (
+            fast_stream_runner
+            if (fast_stream_runner and prepared.intent in self.FAST_INTENTS)
+            else stream_runner
+        )
         final_answer: str = ""
         had_error: Optional[Exception] = None
 
         try:
-            for raw_step in stream_runner(prepared.prompt):
+            for raw_step in effective_runner(prepared.prompt):
                 for event in self._adapt_step(raw_step):
                     if event.kind == "final":
                         final_answer = event.text
@@ -241,22 +261,35 @@ class LobsterBrain:
         intent = self._classify_intent(normalized_question)
         success_criteria = self._build_success_criteria(intent, normalized_question)
         tracked_goal = self._maybe_track_goal(normalized_question, success_criteria)
-        memory_context = self.memory.format_context_for_question(normalized_question)
+
+        # 简单意图注入更少上下文，节省 token
+        is_fast = intent in self.FAST_INTENTS
+        memory_context = self.memory.format_context_for_question(
+            normalized_question,
+            recent_limit=3 if is_fast else None,
+            relevant_limit=3 if is_fast else None,
+            goal_limit=2 if is_fast else None,
+            reflection_limit=1 if is_fast else None,
+        )
 
         prompt_parts = []
         if memory_context:
             prompt_parts.append(memory_context)
 
-        plan_lines = [
-            "=== 当前认知框架 ===",
-            f"意图类型：{intent}",
-            "请先在内部完成：理解目标 → 结合记忆 → 选择工具 → 自检答案。",
-            "本轮完成标准：",
-        ]
-        for criterion in success_criteria:
-            plan_lines.append(f"- {criterion}")
-
-        prompt_parts.append("\n".join(plan_lines))
+        if is_fast:
+            # 单行认知框架，节省 token
+            criteria_str = " ".join(f"({c})" for c in success_criteria[:2])
+            prompt_parts.append(f"[意图:{intent}] {criteria_str}")
+        else:
+            plan_lines = [
+                "=== 当前认知框架 ===",
+                f"意图类型：{intent}",
+                "请先在内部完成：理解目标 → 结合记忆 → 选择工具 → 自检答案。",
+                "本轮完成标准：",
+            ]
+            for criterion in success_criteria:
+                plan_lines.append(f"- {criterion}")
+            prompt_parts.append("\n".join(plan_lines))
         prompt_parts.append(f"当前问题：{normalized_question}")
 
         return PreparedTurn(

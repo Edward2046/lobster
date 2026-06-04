@@ -600,7 +600,7 @@ class MemoryManager:
         candidates.sort(key=lambda item: (item["score"], item["timestamp"]), reverse=True)
         return candidates[:limit]
 
-    def format_recent_context(self, limit: int = 5) -> str:
+    def format_recent_context(self, limit: int = 5, max_content_chars: int = 150) -> str:
         conversations = self.get_recent_conversations(limit=limit)
         if not conversations:
             return ""
@@ -608,7 +608,10 @@ class MemoryManager:
         lines = ["=== 最近对话 ==="]
         for conversation in conversations:
             role_label = "用户" if conversation["role"] == "user" else "我"
-            lines.append(f"{role_label}: {conversation['content']}")
+            content = conversation["content"]
+            if len(content) > max_content_chars:
+                content = content[:max_content_chars] + "…"
+            lines.append(f"{role_label}: {content}")
         lines.append("=" * 20)
         return "\n".join(lines)
 
@@ -616,11 +619,15 @@ class MemoryManager:
         self,
         question: str,
         *,
-        recent_limit: int = 5,
-        relevant_limit: int = 6,
-        goal_limit: int = 3,
-        reflection_limit: int = 3,
+        recent_limit: int | None = None,
+        relevant_limit: int | None = None,
+        goal_limit: int | None = None,
+        reflection_limit: int | None = None,
     ) -> str:
+        recent_limit = recent_limit if recent_limit is not None else settings.memory.RECENT_LIMIT
+        relevant_limit = relevant_limit if relevant_limit is not None else settings.memory.RELEVANT_LIMIT
+        goal_limit = goal_limit if goal_limit is not None else settings.memory.GOAL_LIMIT
+        reflection_limit = reflection_limit if reflection_limit is not None else settings.memory.REFLECTION_LIMIT
         sections: list[str] = []
 
         recent_context = self.format_recent_context(limit=recent_limit)
