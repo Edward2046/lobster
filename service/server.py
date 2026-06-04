@@ -8,6 +8,7 @@ service/server.py — Lobster Agent HTTP API (FastAPI)
   GET  /health                           → { "status": "ok" }
 """
 
+import json
 import logging
 import os
 import threading
@@ -15,7 +16,7 @@ import threading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, StreamingResponse
 import uvicorn
 from service.agent import LobsterBrain
 from config import settings
@@ -124,6 +125,63 @@ def ask(req: AskRequest):
         if "timeout" in str(e).lower():
             return JSONResponse(status_code=504, content={"error": "请求超时，请稍后重试"})
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+def _sse_format(event: str, data: dict) -> str:
+    """组装 SSE 行：event: <name>\\ndata: <json>\\n\\n"""
+    payload = json.dumps(data, ensure_ascii=False)
+    return f"event: {event}\ndata: {payload}\n\n"
+
+
+@app.post("/api/ask/stream")
+def ask_stream(req: AskRequest):
+    """SSE 流式问答，逐 step 推送思考/代码/观察/最终答案。
+
+    事件类型：
+      - plan        计划阶段
+      - thought     思考
+      - code        本轮代码
+      - observation 工具执行结果
+      - final       最终答案
+      - error       异常
+      - done        流结束
+    """
+    question = req.question.strip()
+    if not question:
+        return JSONResponse(status_code=400, content={"error": "question is required"})
+
+    log.info("收到流式问题: %s", question)
+
+    def stream_runner(prompt: str):
+        # smolagents agent.run(stream=True) 返回生成器
+        return get_agent().run(prompt, stream=True)
+
+    def event_generator():
+        # 起手发一个 ready，让前端立即看到连接已建立
+        yield _sse_format("ready", {"message": "thinking..."})
+        try:
+            for ev in get_brain().answer_stream(
+                question, stream_runner, session_id="http_stream"
+            ):
+                yield _sse_format(
+                    ev.kind,
+                    {"step": ev.step, "text": ev.text},
+                )
+        except Exception as exc:
+            log.error("Stream 执行出错: %s", exc)
+            yield _sse_format("error", {"text": str(exc)})
+        finally:
+            yield _sse_format("done", {})
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",  # 禁止 nginx 缓冲
+        },
+    )
 
 
 def start_server(host: str = None, port: int = None):

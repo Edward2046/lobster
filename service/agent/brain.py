@@ -9,14 +9,36 @@ brain.py — Lobster 的轻量认知编排层
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Callable, Iterator, Optional
 
 from service.memory.manager import MemoryManager, get_memory_manager
 
+log = logging.getLogger("lobster.brain")
+
+# smolagents 解析失败时错误信息里包含的原始文本片段
+_PARSE_ERROR_SNIPPET_RE = re.compile(
+    r"Here is your code snippet:\s*([\s\S]+)", re.DOTALL
+)
+
+
+def _extract_text_from_parse_error(exc: Exception) -> str | None:
+    """从 AgentParsingError 中抽取模型原始输出的文本（去掉游离的 </code> 等标签）。"""
+    msg = str(exc)
+    m = _PARSE_ERROR_SNIPPET_RE.search(msg)
+    if not m:
+        return None
+    raw = m.group(1).strip()
+    # 去掉模型误放的游离标签
+    raw = re.sub(r"^\s*</?code>\s*", "", raw)
+    raw = re.sub(r"\s*</?code>\s*$", "", raw)
+    return raw.strip() or None
+
 
 Runner = Callable[[str], object]
+StreamRunner = Callable[[str], Iterator[object]]
 
 
 @dataclass
@@ -25,6 +47,14 @@ class PreparedTurn:
     intent: str
     success_criteria: list[str]
     tracked_goal: str | None
+
+
+@dataclass
+class StreamEvent:
+    """流式事件，给 server 层转 SSE 用。"""
+    kind: str       # "plan" | "thought" | "code" | "observation" | "final" | "error"
+    text: str
+    step: int = 0   # ActionStep 的 step_number，PlanningStep 也算一步
 
 
 class LobsterBrain:
@@ -36,24 +66,31 @@ class LobsterBrain:
         try:
             answer = str(runner(prepared.prompt))
         except Exception as exc:
-            self.memory.save_conversation(role="user", content=question, session_id=session_id)
-            self.memory.save_reflection(
-                question,
-                answer_summary="执行失败",
-                outcome="failure",
-                lessons=f"本轮失败原因：{exc}",
-                confidence=1.0,
-            )
-            self.memory.remember_episode(
-                summary=f"失败：{self._trim(question, 80)}",
-                details=f"问题：{question}\n错误：{exc}",
-                tags=[prepared.intent, "failure"],
-                importance=0.8,
-                session_id=session_id,
-            )
-            if prepared.tracked_goal:
-                self.memory.update_goal_status(prepared.tracked_goal, "blocked")
-            raise
+            # 兜底：如果是 CodeAgent 格式解析错误（AgentParsingError），
+            # 尝试从错误信息里提取模型原始输出文本，避免把有效答案当错误抛出。
+            recovered = _extract_text_from_parse_error(exc)
+            if recovered:
+                log.warning("CodeAgent 格式解析失败，已从错误信息中恢复原始文本: %s", exc)
+                answer = recovered
+            else:
+                self.memory.save_conversation(role="user", content=question, session_id=session_id)
+                self.memory.save_reflection(
+                    question,
+                    answer_summary="执行失败",
+                    outcome="failure",
+                    lessons=f"本轮失败原因：{exc}",
+                    confidence=1.0,
+                )
+                self.memory.remember_episode(
+                    summary=f"失败：{self._trim(question, 80)}",
+                    details=f"问题：{question}\n错误：{exc}",
+                    tags=[prepared.intent, "failure"],
+                    importance=0.8,
+                    session_id=session_id,
+                )
+                if prepared.tracked_goal:
+                    self.memory.update_goal_status(prepared.tracked_goal, "blocked")
+                raise
 
         self.memory.save_conversation(role="user", content=question, session_id=session_id)
         self.memory.save_conversation(role="agent", content=answer, session_id=session_id)
@@ -74,6 +111,130 @@ class LobsterBrain:
         if prepared.tracked_goal:
             self.memory.update_goal_status(prepared.tracked_goal, "completed")
         return answer
+
+    def answer_stream(
+        self,
+        question: str,
+        stream_runner: StreamRunner,
+        *,
+        session_id: str | None = None,
+    ) -> Iterator[StreamEvent]:
+        """流式回答，逐步 yield StreamEvent。
+
+        stream_runner(prompt) 应返回一个迭代器，元素来自 smolagents
+        agent.run(stream=True)：ActionStep / PlanningStep / FinalAnswerStep。
+        """
+        prepared = self.prepare(question)
+        final_answer: str = ""
+        had_error: Optional[Exception] = None
+
+        try:
+            for raw_step in stream_runner(prepared.prompt):
+                for event in self._adapt_step(raw_step):
+                    if event.kind == "final":
+                        final_answer = event.text
+                    yield event
+        except Exception as exc:
+            # 兜底：AgentParsingError 时尝试恢复原始文本作为最终答案
+            recovered = _extract_text_from_parse_error(exc)
+            if recovered:
+                log.warning("CodeAgent 流式格式解析失败，已恢复原始文本: %s", exc)
+                final_answer = recovered
+                yield StreamEvent(kind="final", text=recovered)
+            else:
+                had_error = exc
+                yield StreamEvent(kind="error", text=str(exc))
+
+        # 不论成功失败都要落库（与 answer 行为对齐）
+        if had_error is not None:
+            self.memory.save_conversation(role="user", content=question, session_id=session_id)
+            self.memory.save_reflection(
+                question,
+                answer_summary="执行失败",
+                outcome="failure",
+                lessons=f"本轮失败原因：{had_error}",
+                confidence=1.0,
+            )
+            self.memory.remember_episode(
+                summary=f"失败：{self._trim(question, 80)}",
+                details=f"问题：{question}\n错误：{had_error}",
+                tags=[prepared.intent, "failure"],
+                importance=0.8,
+                session_id=session_id,
+            )
+            if prepared.tracked_goal:
+                self.memory.update_goal_status(prepared.tracked_goal, "blocked")
+            return
+
+        # success
+        self.memory.save_conversation(role="user", content=question, session_id=session_id)
+        self.memory.save_conversation(role="agent", content=final_answer, session_id=session_id)
+        self.memory.save_reflection(
+            question,
+            answer_summary=self._trim(final_answer, 180),
+            outcome="success",
+            lessons=self._derive_lesson(prepared.intent, final_answer),
+            confidence=0.75,
+        )
+        self.memory.remember_episode(
+            summary=self._build_episode_summary(question, final_answer),
+            details=f"问题：{question}\n回答：{self._trim(final_answer, 600)}",
+            tags=[prepared.intent, "success"],
+            importance=self._estimate_importance(question),
+            session_id=session_id,
+        )
+        if prepared.tracked_goal:
+            self.memory.update_goal_status(prepared.tracked_goal, "completed")
+
+    def _adapt_step(self, raw_step) -> Iterator[StreamEvent]:
+        """把 smolagents 的原始 step 转成 StreamEvent 序列。"""
+        cls_name = type(raw_step).__name__
+
+        if cls_name == "ActionStep":
+            step_no = getattr(raw_step, "step_number", 0) or 0
+            # 模型本轮的「思考 + 代码」原文
+            model_output = getattr(raw_step, "model_output", None)
+            if model_output:
+                thought, code = self._split_thought_and_code(str(model_output))
+                if thought:
+                    yield StreamEvent(kind="thought", text=thought, step=step_no)
+                if code:
+                    yield StreamEvent(kind="code", text=code, step=step_no)
+            # 代码执行结果
+            obs = getattr(raw_step, "observations", None)
+            if obs:
+                yield StreamEvent(kind="observation", text=str(obs), step=step_no)
+            err = getattr(raw_step, "error", None)
+            if err:
+                yield StreamEvent(kind="error", text=str(err), step=step_no)
+            return
+
+        if cls_name == "PlanningStep":
+            plan = getattr(raw_step, "plan", "") or ""
+            if plan:
+                yield StreamEvent(kind="plan", text=str(plan).strip())
+            return
+
+        if cls_name == "FinalAnswerStep":
+            output = getattr(raw_step, "output", "")
+            yield StreamEvent(kind="final", text=str(output))
+            return
+
+        # ChatMessageStreamDelta / ToolCall / ToolOutput / ActionOutput 暂不透出
+        return
+
+    @staticmethod
+    def _split_thought_and_code(text: str) -> tuple[str, str]:
+        """把 LLM 输出按代码块切成 thought 和 code 两段（取第一段代码）。"""
+        # 兼容 ```py、```python、<code>...</code> 几种 fence
+        match = re.search(r"```(?:python|py)?\s*\n([\s\S]+?)```", text)
+        if not match:
+            match = re.search(r"<code>\s*([\s\S]+?)\s*</code>", text)
+        if not match:
+            return text.strip(), ""
+        code = match.group(1).strip()
+        thought = (text[:match.start()] + text[match.end():]).strip()
+        return thought, code
 
     def prepare(self, question: str) -> PreparedTurn:
         normalized_question = question.strip()
