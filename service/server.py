@@ -88,6 +88,9 @@ def get_agent_fast():
             _agent_fast = _build_agent(settings.agent.MODEL_ID_FAST, max_steps=8)
             log.info("Agent (fast) 初始化完成，模型：%s", settings.agent.MODEL_ID_FAST)
     return _agent_fast
+
+
+def get_brain():
     global _brain
     with _agent_lock:
         if _brain is None:
