@@ -1,0 +1,43 @@
+2026-06-19 09:36:48 [INFO] lobster.scheduler: ▶ 执行任务: finance (类型: report)
+2026-06-19 09:52:35 [ERROR] lobster.scheduler: ❌ 任务执行失败: finance, 错误: Missing credentials. Please pass an `api_key`, `workload_identity`, `admin_api_key`, or set the `OPENAI_API_KEY` or `OPENAI_ADMIN_KEY` environment variable.
+2026-06-19 09:52:35 [INFO] lobster.scheduler: ▶ 执行任务: tech_news (类型: report)
+2026-06-19 09:52:35 [ERROR] lobster.scheduler: ❌ 任务执行失败: tech_news, 错误: Missing credentials. Please pass an `api_key`, `workload_identity`, `admin_api_key`, or set the `OPENAI_API_KEY` or `OPENAI_ADMIN_KEY` environment variable.
+2026-06-19 09:52:35 [INFO] lobster.scheduler: ▶ 执行任务: tech-express-morning (类型: custom)
+2026-06-19 09:52:35 [ERROR] lobster.scheduler: ❌ 任务执行失败: tech-express-morning, 错误: Stderr:
+Traceback (most recent call last):
+  File "/Users/guolibing/workspace/lobster/service/tools/code_executor_tool.py", line 33, in execute_python_code
+    exec(compile(module, "<lobster-exec>", "exec"), globals_dict, globals_dict)
+  File "<lobster-exec>", line 9, in <module>
+NameError: name 'get_tech_news' is not defined
+2026-06-19 09:52:35 [INFO] lobster.scheduler: ▶ 执行任务: earnings-report-daily (类型: custom)
+2026-06-19 09:52:35 [ERROR] lobster.scheduler: ❌ 任务执行失败: earnings-report-daily, 错误: Stderr:
+Traceback (most recent call last):
+  File "/Users/guolibing/workspace/lobster/service/tools/code_executor_tool.py", line 33, in execute_python_code
+    exec(compile(module, "<lobster-exec>", "exec"), globals_dict, globals_dict)
+  File "<lobster-exec>", line 206, in <module>
+  File "/Users/guolibing/.pyenv/versions/3.12.13/lib/python3.12/site-packages/smolagents/tools.py", line 246, in __call__
+    outputs = self.forward(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/guolibing/.pyenv/versions/3.12.13/lib/python3.12/site-packages/smolagents/tools.py", line 1098, in wrapped_function
+    return tool_function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/guolibing/workspace/lobster/service/tools/notify_tool.py", line 30, in send_notification
+    return send_notification_result(channel, title, content)["message"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/guolibing/workspace/lobster/service/tools/notify_tool.py", line 13, in send_notification_result
+    ok = send_wxpusher(title, content, content_type=3 if markdown else 1)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/guolibing/workspace/lobster/service/notifications/wxpusher.py", line 19, in send_wxpusher
+    "appToken": os.environ["WXPUSHER_APP_TOKEN"],
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 714, in __getitem__
+KeyError: 'WXPUSHER_APP_TOKEN'
+2026-06-19 09:52:35 [INFO] lobster.scheduler: ▶ 执行任务: food (类型: report)
+2026-06-19 09:52:35 [ERROR] lobster.scheduler: ❌ 任务执行失败: food, 错误: Missing credentials. Please pass an `api_key`, `workload_identity`, `admin_api_key`, or set the `OPENAI_API_KEY` or `OPENAI_ADMIN_KEY` environment variable.
+2026-06-19 16:27:11 [INFO] lobster.scheduler: ▶ 执行任务: tech-express-afternoon (类型: custom)
+2026-06-19 16:27:11 [ERROR] lobster.scheduler: ❌ 任务执行失败: tech-express-afternoon, 错误: Stderr:
+Traceback (most recent call last):
+  File "/Users/guolibing/workspace/lobster/service/tools/code_executor_tool.py", line 33, in execute_python_code
+    exec(compile(module, "<lobster-exec>", "exec"), globals_dict, globals_dict)
+  File "<lobster-exec>", line 9, in <module>
+NameError: name 'get_tech_news' is not defined

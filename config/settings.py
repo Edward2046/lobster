@@ -120,6 +120,7 @@ class AlertSettings:
 class NotificationSettings:
     """通知渠道配置"""
     WXPUSHER_APP_TOKEN: Optional[str] = field(default_factory=lambda: os.environ.get("WXPUSHER_APP_TOKEN"))
+    WXPUSHER_UIDS: Optional[str] = field(default_factory=lambda: os.environ.get("WXPUSHER_UIDS"))
     WXPUSHER_UID: Optional[str] = field(default_factory=lambda: os.environ.get("WXPUSHER_UID"))
     FEISHU_WEBHOOK: Optional[str] = field(default_factory=lambda: os.environ.get("FEISHU_WEBHOOK"))
     REQUEST_TIMEOUT: int = field(default_factory=lambda: _get_int("NOTIFICATION_TIMEOUT", 10))

@@ -122,7 +122,7 @@ start_backend() {
   log "Starting backend..."
   (
     cd "$ROOT_DIR"
-    nohup python main.py >>"$BACKEND_LOG" 2>&1 &
+    nohup python3 main.py >>"$BACKEND_LOG" 2>&1 &
     backend_pid=$!
     write_pid_file "$BACKEND_PID_FILE" "$backend_pid"
   )
@@ -162,6 +162,7 @@ start_frontend() {
   (
     cd "$ROOT_DIR/web"
     nohup npm run dev -- --host 0.0.0.0 >>"$FRONTEND_LOG" 2>&1 &
+    # nohup npx vite --host 0.0.0.0 >>"$FRONTEND_LOG" 2>&1 &
     frontend_pid=$!
     write_pid_file "$FRONTEND_PID_FILE" "$frontend_pid"
   )

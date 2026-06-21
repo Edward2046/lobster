@@ -1,0 +1,42 @@
+[2026-06-17 20:24:18] Starting backend...
+[2026-06-17 20:24:49] Backend did not become healthy within 30 seconds.
+[2026-06-17 20:26:34] Starting backend...
+[2026-06-17 20:27:04] Backend did not become healthy within 30 seconds.
+[2026-06-17 20:31:34] Starting backend...
+[2026-06-17 20:32:05] Backend did not become healthy within 30 seconds.
+[2026-06-17 20:40:35] Starting backend...
+2026-06-17 20:40:35 [INFO] lobster: 🦞 Lobster 启动
+2026-06-17 20:40:35 [INFO] lobster: ⏰ 调度器启动
+2026-06-17 20:40:35 [INFO] lobster:    earnings: every monday at 08:00 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    finance: every day at 09:00 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    food: every day at 09:30 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    tech_news: every day at 09:00 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    earnings-report-daily: every day at 09:15 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    tech-express-afternoon: every day at 15:30 → wxpusher
+2026-06-17 20:40:35 [INFO] lobster:    tech-express-morning: every day at 09:00 → wxpusher
+2026-06-17 20:40:36 [INFO] lobster.server: 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-17 20:40:38] Backend started in background with PID 47442.
+[2026-06-17 20:40:38] Starting frontend...
+[2026-06-17 20:41:13] Frontend is already stopped.
+[2026-06-17 20:41:13] Backend is already stopped.
+[2026-06-18 19:12:57] Starting backend...
+2026-06-18 19:12:58 [INFO] lobster: 🦞 Lobster 启动
+2026-06-18 19:12:58 [INFO] lobster: ⏰ 调度器启动
+2026-06-18 19:12:58 [INFO] lobster:    earnings: every monday at 08:00 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    finance: every day at 09:00 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    food: every day at 09:30 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    tech_news: every day at 09:00 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    earnings-report-daily: every day at 09:15 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    tech-express-afternoon: every day at 15:30 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster:    tech-express-morning: every day at 09:00 → wxpusher
+2026-06-18 19:12:58 [INFO] lobster.server: 🌐 Agent HTTP 服务启动: http://0.0.0.0:8765
+[2026-06-18 19:12:59] Backend started in background with PID 99016.
+[2026-06-18 19:12:59] Starting frontend...
+[2026-06-18 19:13:29] Frontend did not become ready within 30 seconds.
+[2026-06-18 19:20:20] Backend is already running on :8765.
+[2026-06-18 19:20:20] Starting frontend...
+[2026-06-18 19:20:51] Frontend did not become ready within 30 seconds.
+[2026-06-18 19:23:08] Backend is already running on :8765.
+[2026-06-18 19:23:08] Starting frontend...
+[2026-06-18 19:23:09] Frontend started in background with PID 408.
+[2026-06-18 19:23:09] Lobster is running. Logs: lobster.log (script) / backend.log / frontend.log under logs/.
