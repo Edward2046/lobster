@@ -20,7 +20,7 @@ def send_wxpusher(title: str, content: str, content_type: int = 1) -> bool:
         "content": content,
         "summary": title,          # 微信通知栏显示的摘要
         "contentType": content_type,
-        "uids": [os.environ["WXPUSHER_UID"]],
+        "uids": [uid.strip() for uid in os.environ["WXPUSHER_UID"].split(",") if uid.strip()],
     }
     try:
         resp = requests.post(url, json=payload, timeout=10)
