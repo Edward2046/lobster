@@ -33,8 +33,9 @@ agent.py — 本地 AI Agent 入口
 import sys
 import os
 from dotenv import load_dotenv
-from smolagents import CodeAgent, LiteLLMModel
+from smolagents import LiteLLMModel
 from service.agent.brain import LobsterBrain
+from service.agent.code_agent import LobsterCodeAgent
 from service.agent.prompt import get_prompt_templates
 from service.tools import (
     get_current_time,
@@ -96,7 +97,7 @@ model = LiteLLMModel(
 #   model         — 驱动 Agent 推理的语言模型
 #   max_steps     — 最多执行几轮 Thought→Code→Observation 循环，防止死循环
 #   verbosity_level — 日志详细程度：0=静默，1=显示每步摘要，2=显示完整代码
-agent = CodeAgent(
+agent = LobsterCodeAgent(
     tools=[
         get_current_time,
         calculate,

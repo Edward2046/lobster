@@ -48,8 +48,8 @@ export default function InputBar({ onSend, disabled }: Props) {
         onKeyDown={handleKeyDown}
         disabled={disabled}
       />
-      <button onClick={handleSend} disabled={disabled || !value.trim()}>
-        发送
+      <button onClick={handleSend} disabled={disabled || !value.trim()} aria-label="发送" title="发送">
+        ↑
       </button>
     </div>
   )

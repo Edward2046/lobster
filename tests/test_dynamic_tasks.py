@@ -67,6 +67,29 @@ class DynamicTaskTests(unittest.TestCase):
         remaining_names = {task["name"] for task in list_task_records()}
         self.assertNotIn("demo-task", remaining_names)
 
+    def test_update_task_can_pause_and_resume(self):
+        create_task(
+            name="pausable-task",
+            schedule_expr="every hour",
+            notify_channel="none",
+            description="pausable",
+            task_type="custom",
+            task_params='{"code": "_result = 1"}',
+        )
+
+        # 暂停：enabled=False → 从调度器移除，但记录保留
+        paused_msg = update_task("pausable-task", enabled=False)
+        self.assertIn("paused", paused_msg.lower())
+        self.assertEqual(get_task_record("pausable-task")["enabled"], 0)
+        self.assertNotIn("pausable-task", {j.tags and list(j.tags)[0] for j in scheduler.jobs})
+
+        # 恢复：enabled=True → 重新注册
+        resumed_msg = update_task("pausable-task", enabled=True)
+        self.assertNotIn("paused", resumed_msg.lower())
+        self.assertEqual(get_task_record("pausable-task")["enabled"], 1)
+
+        delete_task("pausable-task")
+
     def test_run_task_injects_tool_globals(self):
         create_task(
             name="tool-task",
@@ -91,6 +114,7 @@ class DynamicTaskTests(unittest.TestCase):
         self.assertIn("get_investing_news", extra_globals)
         self.assertIn("get_earnings_calendar", extra_globals)
         self.assertIn("get_food_trends", extra_globals)
+        self.assertIn("get_tech_news", extra_globals)
         self.assertIn("search_web", extra_globals)
         self.assertEqual(extra_globals["notify_channel"], "feishu")
         self.assertEqual(extra_globals["task_name"], "tool-task")

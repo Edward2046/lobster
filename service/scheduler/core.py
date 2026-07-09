@@ -165,6 +165,7 @@ def _build_execution_context(task: dict) -> dict:
         get_earnings_calendar,
         get_food_trends,
         get_investing_news,
+        get_tech_news,
         get_weather,
         search_web,
     )
@@ -176,6 +177,7 @@ def _build_execution_context(task: dict) -> dict:
         "get_investing_news": get_investing_news,
         "get_earnings_calendar": get_earnings_calendar,
         "get_food_trends": get_food_trends,
+        "get_tech_news": get_tech_news,
         "search_web": search_web,
         "send_notification": send_notification,
         "send_notification_result": send_notification_result,

@@ -17,8 +17,8 @@ export default function ChatWindow({ messages }: Props) {
     <div className="chat-window">
       {messages.length === 0 && (
         <div className="empty-hint">
-          <div className="icon">🦞</div>
-          <p>问我任何问题，比如天气、财经资讯、财报日历……</p>
+          <h2 className="greeting">你好，我能帮你做点什么？</h2>
+          <p>问我天气、财经资讯、财报日历，或让我帮你管理定时任务……</p>
         </div>
       )}
       {messages.map((msg) => (

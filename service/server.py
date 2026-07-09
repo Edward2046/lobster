@@ -30,10 +30,11 @@ _agent_lock = threading.Lock()
 _brain = None
 
 
-def _build_agent(model_id: str, max_steps: int | None = None) -> "CodeAgent":
+def _build_agent(model_id: str, max_steps: int | None = None) -> "LobsterCodeAgent":
     """创建 CodeAgent，延迟 import 避免循环依赖。"""
-    from smolagents import CodeAgent, LiteLLMModel
+    from smolagents import LiteLLMModel
     from service.agent import get_prompt_templates
+    from service.agent.code_agent import LobsterCodeAgent
     from service.tools import (
         get_current_time, calculate, get_weather,
         get_investing_news, get_earnings_calendar, get_food_trends, get_tech_news,
@@ -51,7 +52,7 @@ def _build_agent(model_id: str, max_steps: int | None = None) -> "CodeAgent":
         timeout=settings.agent.TIMEOUT,
         num_retries=settings.agent.NUM_RETRIES,
     )
-    return CodeAgent(
+    return LobsterCodeAgent(
         tools=[
             get_current_time, calculate, get_weather,
             get_investing_news, get_earnings_calendar, get_food_trends, get_tech_news,

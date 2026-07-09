@@ -9,6 +9,7 @@ brain.py — Lobster 的轻量认知编排层
 
 from __future__ import annotations
 
+import ast
 import logging
 import re
 from dataclasses import dataclass
@@ -20,21 +21,170 @@ log = logging.getLogger("lobster.brain")
 
 # smolagents 解析失败时错误信息里包含的原始文本片段
 _PARSE_ERROR_SNIPPET_RE = re.compile(
-    r"Here is your code snippet:\s*([\s\S]+)", re.DOTALL
+    r"Here is your code snippet:\s*([\s\S]+?)(?=\s*Make sure to include code\b|$)",
+    re.DOTALL,
 )
 
 
+def _extract_final_answer_text(code: str) -> str | None:
+    """从 final_answer("...") 代码中提取用户可见文本。"""
+    try:
+        parsed = ast.parse(code.strip())
+    except SyntaxError:
+        return None
+
+    if len(parsed.body) != 1:
+        return None
+    expr = parsed.body[0]
+    if not isinstance(expr, ast.Expr) or not isinstance(expr.value, ast.Call):
+        return None
+    call = expr.value
+    if not isinstance(call.func, ast.Name) or call.func.id != "final_answer" or not call.args:
+        return None
+    first_arg = call.args[0]
+    if isinstance(first_arg, ast.Constant) and isinstance(first_arg.value, str):
+        return first_arg.value.strip()
+    return None
+
+
+def _cleanup_parse_error_snippet(snippet: str) -> str | None:
+    raw = snippet.strip()
+    raw = re.sub(r"^\s*</?code>\s*", "", raw)
+    raw = re.sub(r"\s*</?code>\s*$", "", raw)
+    raw = re.sub(r"^\s*```(?:python|py)?\s*", "", raw)
+    raw = re.sub(r"\s*```\s*$", "", raw)
+    if not raw:
+        return None
+
+    extracted = _extract_final_answer_text(raw)
+    if extracted:
+        return extracted
+    return raw.strip() or None
+
+
 def _extract_text_from_parse_error(exc: Exception) -> str | None:
-    """从 AgentParsingError 中抽取模型原始输出的文本（去掉游离的 </code> 等标签）。"""
+    """从 AgentParsingError 中抽取模型原始输出的文本。"""
     msg = str(exc)
     m = _PARSE_ERROR_SNIPPET_RE.search(msg)
     if not m:
         return None
-    raw = m.group(1).strip()
-    # 去掉模型误放的游离标签
-    raw = re.sub(r"^\s*</?code>\s*", "", raw)
-    raw = re.sub(r"\s*</?code>\s*$", "", raw)
-    return raw.strip() or None
+    return _cleanup_parse_error_snippet(m.group(1))
+
+
+# 匹配「整段代码只是一个 final_answer(...) 调用、且参数是带前缀(f/r/b等)的引号字符串」的形式。
+# 贪婪 .* + 反向引用 (?P=q) 会一直吃到最后一个同类型引号，
+# 用来兜底模型把多行文本塞进单引号字符串导致的 “unterminated string literal”。
+_LONE_FINAL_ANSWER_RE = re.compile(
+    r'^\s*final_answer\(\s*[a-zA-Z]*(?P<q>["\'])(?P<body>.*)(?P=q)\s*\)\s*$',
+    re.DOTALL,
+)
+
+
+def _fix_unterminated_final_answer(code: str) -> str | None:
+    """把 final_answer("多行\n未转义文本") 修成合法的 Python 字符串字面量。
+
+    仅处理「整段代码就是一个 final_answer(...) 调用」这种最常见的坏形态：
+    模型用单层引号包裹了含换行的长文本，导致 ast.parse 报未闭合字符串。
+    返回修复后的代码；无法安全修复时返回 None。
+    """
+    m = _LONE_FINAL_ANSWER_RE.match(code.strip())
+    if not m:
+        return None
+    body = m.group("body")
+    # repr 会生成带正确转义的合法字符串字面量（换行变 \n，内部引号自动转义）。
+    return f"final_answer({body!r})"
+
+
+# 模型经常直接用 json.dumps / re.search 等却忘了 import。
+# smolagents 沙箱里名字必须在代码里显式导入/定义，否则报 “variable not defined”。
+# 这里只对常用标准库做自动补 import，其余保持不动，避免误伤。
+_AUTO_IMPORT_MODULES: frozenset[str] = frozenset(
+    {
+        "json", "re", "os", "sys", "math", "random", "time", "datetime",
+        "collections", "itertools", "functools", "base64", "hashlib",
+        "textwrap", "csv", "statistics", "pathlib", "uuid", "decimal",
+    }
+)
+
+
+def _collect_bound_names(tree: ast.AST) -> set[str]:
+    """收集代码里已经「定义」的顶层名字：import、赋值、函数/类、for、with、参数等。"""
+    bound: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                bound.add((alias.asname or alias.name).split(".")[0])
+        elif isinstance(node, ast.ImportFrom):
+            for alias in node.names:
+                bound.add(alias.asname or alias.name)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            bound.add(node.name)
+        elif isinstance(node, ast.arg):
+            bound.add(node.arg)
+        elif isinstance(node, ast.Name) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            bound.add(node.id)
+    return bound
+
+
+def _inject_missing_imports(code: str) -> str:
+    """给「用了常用标准库却没 import」的代码自动补上 import 语句。
+
+    只处理形如 `<module>.<attr>` 的用法，且 <module> 在白名单里、又没被
+    import/赋值/定义过时才补。补完的 import 放在代码最前面。
+    """
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return code
+
+    used_as_module: set[str] = set()
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and isinstance(node.value.ctx, ast.Load)
+        ):
+            used_as_module.add(node.value.id)
+
+    bound = _collect_bound_names(tree)
+    missing = sorted(m for m in used_as_module if m in _AUTO_IMPORT_MODULES and m not in bound)
+    if not missing:
+        return code
+
+    log.warning("检测到未导入的模块 %s，已自动补 import。", ", ".join(missing))
+    header = "".join(f"import {m}\n" for m in missing)
+    return header + code
+
+
+def sanitize_agent_code(code: str) -> str:
+    """在交给 Python 解释器执行前，尽量修复模型生成的坏代码。
+
+    覆盖两类高频问题：
+    1. final_answer 里塞了未闭合的多行字符串（解析期语法错误）；
+    2. 用了 json/re/datetime 等常用标准库却忘了 import（运行期 NameError）。
+
+    修复都以「不改变原意、且能通过 ast.parse」为前提，无法安全修复时保持原样，
+    让上层照常报错，不掩盖真正的问题。
+    """
+    if not code or not code.strip():
+        return code
+
+    # 1) 先处理解析层面的坏字符串，让代码至少能被 ast.parse。
+    try:
+        ast.parse(code)
+    except SyntaxError:
+        fixed = _fix_unterminated_final_answer(code)
+        if fixed is None:
+            return code
+        try:
+            ast.parse(fixed)
+        except SyntaxError:
+            return code
+        log.warning("检测到 final_answer 未闭合字符串，已自动修复为合法字面量。")
+        code = fixed
+
+    # 2) 代码此时可解析，再补上缺失的常用标准库 import。
+    return _inject_missing_imports(code)
 
 
 Runner = Callable[[str], object]
@@ -226,7 +376,9 @@ class LobsterBrain:
                 yield StreamEvent(kind="observation", text=str(obs), step=step_no)
             err = getattr(raw_step, "error", None)
             if err:
-                yield StreamEvent(kind="error", text=str(err), step=step_no)
+                # 单步错误是可恢复的（smolagents 会自动重试下一步），
+                # 用 step_error 归到「思考过程」里展示，不当致命错误顶掉最终答案。
+                yield StreamEvent(kind="step_error", text=str(err), step=step_no)
             return
 
         if cls_name == "PlanningStep":

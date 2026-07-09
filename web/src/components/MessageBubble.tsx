@@ -7,6 +7,7 @@ const STEP_ICONS: Record<string, string> = {
   thought: '💭',
   code: '💻',
   observation: '🔍',
+  step_error: '⚠️',
 }
 
 function truncate(text: string, limit: number) {
@@ -105,36 +106,39 @@ export default function MessageBubble({ message }: Props) {
   const isLoading = message.role === 'loading'
 
   return (
-    <div className={`message ${isLoading ? 'loading' : 'agent'}`}>
-      {/* 思考中动画点 */}
-      {isLoading && (
-        <div className="thinking-header">
-          <div className="thinking-dots">
-            <span /><span /><span />
+    <div className="agent-row">
+      <div className="agent-avatar" aria-hidden="true">✦</div>
+      <div className={`message ${isLoading ? 'loading' : 'agent'}`}>
+        {/* 思考中动画点 */}
+        {isLoading && (
+          <div className="thinking-header">
+            <div className="thinking-dots">
+              <span /><span /><span />
+            </div>
+            <span className="thinking-label">思考中</span>
           </div>
-          <span className="thinking-label">思考中</span>
-        </div>
-      )}
+        )}
 
-      {/* 思考步骤折叠区 */}
-      {(steps.length > 0 || isLoading) && (
-        <ThinkingSteps
-          steps={steps}
-          open={stepsOpen}
-          onToggle={() => setStepsOpen((o) => !o)}
-          isLoading={isLoading}
-        />
-      )}
+        {/* 思考步骤折叠区 */}
+        {(steps.length > 0 || isLoading) && (
+          <ThinkingSteps
+            steps={steps}
+            open={stepsOpen}
+            onToggle={() => setStepsOpen((o) => !o)}
+            isLoading={isLoading}
+          />
+        )}
 
-      {/* 最终答案（带打字机效果） */}
-      {!isLoading && (
-        <>
-          {steps.length > 0 && <hr className="thinking-divider" />}
-          <div className={`markdown-body${!done ? ' streaming' : ''}`}>
-            <ReactMarkdown>{displayed}</ReactMarkdown>
-          </div>
-        </>
-      )}
+        {/* 最终答案（带打字机效果） */}
+        {!isLoading && (
+          <>
+            {steps.length > 0 && <hr className="thinking-divider" />}
+            <div className={`markdown-body${!done ? ' streaming' : ''}`}>
+              <ReactMarkdown>{displayed}</ReactMarkdown>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   )
 }

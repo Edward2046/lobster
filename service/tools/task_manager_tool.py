@@ -178,8 +178,12 @@ def update_task(
     task_params: str | None = None,
     notify_channel: str | None = None,
     description: str | None = None,
+    enabled: bool | None = None,
 ) -> str:
-    """Update a task's schedule, type, parameters, channel, or description.
+    """Update a task's schedule, type, parameters, channel, description, or enabled state.
+
+    To pause a task, call with enabled=False (do NOT invent a fake far-future
+    schedule like 'every 100 years'); to resume it, call with enabled=True.
 
     Args:
         name: Task name in slug format.
@@ -188,6 +192,8 @@ def update_task(
         task_params: Optional updated JSON parameters string.
         notify_channel: Optional updated channel: 'wxpusher', 'feishu', or 'none'.
         description: Optional updated description.
+        enabled: Optional on/off switch. False pauses the task (unscheduled but kept),
+                 True resumes it. Leave as None to keep the current state.
     """
     initialize_scheduler()
     task_name = _validate_task_name(name)
@@ -199,6 +205,8 @@ def update_task(
     if schedule_expr is not None:
         parse_schedule_expr(schedule_expr)
         updates["schedule_expr"] = schedule_expr.strip()
+    if enabled is not None:
+        updates["enabled"] = 1 if enabled else 0
     if task_type is not None:
         updates["task_type"] = _validate_task_type(task_type)
     if task_params is not None:
@@ -221,5 +229,7 @@ def update_task(
     if task is None:
         return f"Task '{task_name}' not found."
     job = register_task(task)
+    if not task.get("enabled", 1):
+        return f"Task '{task_name}' updated and paused (disabled). Resume it with enabled=True."
     next_run = getattr(job, "next_run", None)
     return f"Task '{task_name}' updated successfully. Next run: {next_run or 'when scheduler starts'}."

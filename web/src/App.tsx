@@ -18,7 +18,7 @@ export interface Message {
 
 let nextId = 1
 
-const THINKING_EVENTS = new Set(['plan', 'thought', 'code', 'observation'])
+const THINKING_EVENTS = new Set(['plan', 'thought', 'code', 'observation', 'step_error'])
 
 function parseSSEChunk(
   buffer: string,
@@ -140,7 +140,10 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <span className="logo">🦞</span>
-        <h1>Lobster Agent</h1>
+        <div className="titles">
+          <h1>Lobster Agent</h1>
+          <span className="subtitle">你的本地智能助手 · 天气 · 财经 · 运维诊断</span>
+        </div>
       </header>
       <ChatWindow messages={messages} />
       <InputBar onSend={handleSend} disabled={loading} />
