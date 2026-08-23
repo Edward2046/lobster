@@ -22,7 +22,7 @@ from service.scheduler import (
 _TASK_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _ALLOWED_CHANNELS = {"wxpusher", "feishu", "none"}
 _ALLOWED_TASK_TYPES = {"report", "custom"}
-_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings", "tech_news", "log_monitor"}
+_ALLOWED_REPORT_TYPES = {"finance", "food_trends", "earnings", "tech_news", "log_monitor", "futu_scan"}
 
 
 def _validate_task_name(name: str) -> str:
@@ -98,7 +98,8 @@ def create_task(
         task_type: Task type. 'report' for built-in reports (finance/food_trends/earnings),
                    or 'custom' for custom Python code. Defaults to 'custom'.
         task_params: JSON string of task parameters. For 'report' type:
-                     '{"report_type": "finance"}' or "food_trends" or "earnings".
+                     '{"report_type": "finance"}' or "food_trends" or "earnings"
+                     or "tech_news" or "log_monitor" or "futu_scan".
                      For 'custom' type: '{"code": "your python code here"}'.
     """
     initialize_scheduler()

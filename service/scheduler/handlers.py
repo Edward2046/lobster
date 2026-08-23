@@ -37,14 +37,17 @@ def execute_report_task(params: dict, context: dict) -> str:
         from service.reports.tech_news import build_report
     elif report_type == "log_monitor":
         from service.reports.log_monitor import build_report
+    elif report_type == "futu_scan":
+        from service.reports.futu_scan import build_report
     else:
         raise ValueError(f"Unknown report_type: {report_type}")
 
-    # log_monitor 需要 params 才能拿到 app_id/阈值；其他 report 暂不需要
-    if report_type == "log_monitor":
+    if report_type in {"log_monitor", "futu_scan"}:
         title, content = build_report(params)
         if title is None or content is None:
-            return f"log_monitor: app_id={params.get('app_id')} 未触发告警，跳过推送。"
+            if report_type == "log_monitor":
+                return f"log_monitor: app_id={params.get('app_id')} 未触发告警，跳过推送。"
+            return "futu_scan: 无规则命中，跳过推送。"
     else:
         title, content = build_report()
 

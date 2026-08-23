@@ -168,7 +168,17 @@ def _build_execution_context(task: dict) -> dict:
         get_tech_news,
         get_weather,
         search_web,
+        add_futu_rule,
+        delete_futu_rule,
+        enable_futu_rule,
+        get_futu_positions,
+        get_futu_quote,
+        get_futu_status,
+        list_futu_rules,
+        place_futu_order,
+        run_futu_rules,
     )
+    from service.tools.futu_trading_tool import format_rule_scan
 
     tool_globals = {
         "get_current_time": get_current_time,
@@ -181,6 +191,16 @@ def _build_execution_context(task: dict) -> dict:
         "search_web": search_web,
         "send_notification": send_notification,
         "send_notification_result": send_notification_result,
+        "get_futu_status": get_futu_status,
+        "get_futu_quote": get_futu_quote,
+        "get_futu_positions": get_futu_positions,
+        "list_futu_rules": list_futu_rules,
+        "add_futu_rule": add_futu_rule,
+        "delete_futu_rule": delete_futu_rule,
+        "enable_futu_rule": enable_futu_rule,
+        "run_futu_rules": run_futu_rules,
+        "place_futu_order": place_futu_order,
+        "format_rule_scan": format_rule_scan,
         "notify_channel": task["notify_channel"],
         "task_name": task["name"],
     }

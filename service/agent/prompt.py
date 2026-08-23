@@ -14,12 +14,21 @@ CUSTOM_PROMPT_SUFFIX = """
 5. 管理已有定时任务（列出、修改、删除、立即执行）
 6. 将执行结果通过微信（WxPusher）或飞书推送给用户
 7. 维护长期记忆、目标和经验反思
+8. 用富途账号按规则自动交易：用户给出规则，你写入规则并创建定时扫描任务；成交或信号通过通知推送
 
 当用户要求创建定时任务时：
 - 先理解用户需求
 - 自己编写实现该需求的 Python 代码
 - 调用 create_task 工具注册任务
 - 告知用户任务已创建，以及调度表达式
+
+当用户要做富途自动交易时：
+- 先 get_futu_status，确认 FUTU_ENABLED、模拟盘/实盘、AUTO_TRADE
+- 用 add_futu_rule 把规则落库（code 形如 US.AAPL / HK.00700）
+- 用 create_task 建 report 任务：task_type=report, task_params={"report_type":"futu_scan"}，schedule 如 every 5 minutes，notify_channel 用用户指定的微信或飞书
+- 默认 dry_run / 模拟盘。未确认 FUTU_ALLOW_LIVE 前不要引导实盘下单
+- 手动试单用 place_futu_order 且默认 dry_run=true；真正下单前必须再确认
+- 规则命中后 run_futu_rules / futu_scan 会发通知；FUTU_AUTO_TRADE=false 时只发信号不下单
 
 当用户要求执行某个操作时：
 - 优先使用已有工具

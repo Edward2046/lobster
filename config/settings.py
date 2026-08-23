@@ -134,6 +134,23 @@ class ToolSettings:
 
 
 @dataclass
+class FutuSettings:
+    """富途 OpenD 自动交易配置。默认模拟盘，实盘必须显式打开。"""
+    ENABLED: bool = field(default_factory=lambda: _get_bool("FUTU_ENABLED", False))
+    HOST: str = field(default_factory=lambda: _get_str("FUTU_HOST", "127.0.0.1"))
+    PORT: int = field(default_factory=lambda: _get_int("FUTU_PORT", 11111))
+    TRD_ENV: str = field(default_factory=lambda: _get_str("FUTU_TRD_ENV", "SIMULATE"))
+    ALLOW_LIVE: bool = field(default_factory=lambda: _get_bool("FUTU_ALLOW_LIVE", False))
+    AUTO_TRADE: bool = field(default_factory=lambda: _get_bool("FUTU_AUTO_TRADE", False))
+    UNLOCK_PASSWORD: Optional[str] = field(default_factory=lambda: os.environ.get("FUTU_UNLOCK_PASSWORD"))
+    ACC_ID: Optional[str] = field(default_factory=lambda: os.environ.get("FUTU_ACC_ID") or None)
+    MARKET: str = field(default_factory=lambda: _get_str("FUTU_MARKET", "US"))
+    MAX_QTY: int = field(default_factory=lambda: _get_int("FUTU_MAX_QTY", 100))
+    MAX_NOTIONAL: float = field(default_factory=lambda: _get_float("FUTU_MAX_NOTIONAL", 5000.0))
+    DB_PATH: Path = field(default_factory=lambda: DATA_DIR / "futu.db")
+
+
+@dataclass
 class ESSettings:
     """Elasticsearch 日志查询配置"""
     BASE_URL: str = field(default_factory=lambda: _get_str("ES_BASE_URL", "http://localhost:9200"))
@@ -189,6 +206,7 @@ class Settings:
     alert: AlertSettings = field(default_factory=AlertSettings)
     notification: NotificationSettings = field(default_factory=NotificationSettings)
     tool: ToolSettings = field(default_factory=ToolSettings)
+    futu: FutuSettings = field(default_factory=FutuSettings)
     log: LogSettings = field(default_factory=LogSettings)
     es: ESSettings = field(default_factory=ESSettings)
     log_monitor: LogMonitorSettings = field(default_factory=LogMonitorSettings)

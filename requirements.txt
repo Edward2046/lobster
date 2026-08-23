@@ -8,3 +8,5 @@ fastapi>=0.110.0
 uvicorn[standard]>=0.29.0
 schedule>=1.2.0
 tavily-python>=0.3.0
+# 富途 OpenAPI（可选）。自动交易需本机运行 Futu OpenD，并设置 FUTU_ENABLED=true。
+# futu-api>=8.2

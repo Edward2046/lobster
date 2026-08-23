@@ -45,6 +45,9 @@ def _build_agent(model_id: str, max_steps: int | None = None) -> "LobsterCodeAge
         get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
         check_database_health, run_diagnostics,
         get_container_metrics, get_container_logs,
+        get_futu_status, get_futu_quote, get_futu_positions,
+        list_futu_rules, add_futu_rule, delete_futu_rule, enable_futu_rule,
+        run_futu_rules, place_futu_order,
     )
     model = LiteLLMModel(
         model_id=model_id,
@@ -63,6 +66,9 @@ def _build_agent(model_id: str, max_steps: int | None = None) -> "LobsterCodeAge
             get_system_metrics, analyze_logs, send_alert, list_recent_alerts,
             check_database_health, run_diagnostics,
             get_container_metrics, get_container_logs,
+            get_futu_status, get_futu_quote, get_futu_positions,
+            list_futu_rules, add_futu_rule, delete_futu_rule, enable_futu_rule,
+            run_futu_rules, place_futu_order,
         ],
         model=model,
         prompt_templates=get_prompt_templates(),

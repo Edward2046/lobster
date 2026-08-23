@@ -182,7 +182,8 @@ caffeinate -is ./scripts/start.sh start
 记忆与目标（`remember_fact` / `recall_fact` / `create_goal` …）、
 定时任务（`create_task` / `list_tasks` / `update_task` / `run_task_now` / `delete_task`）、
 代码执行（`execute_python`）、通知（`send_notification`）、
-运维监控（`get_system_metrics` / `analyze_logs` / `check_database_health` / `run_diagnostics` / `get_container_metrics` / 容器与 ES 日志监控）等。
+运维监控（`get_system_metrics` / `analyze_logs` / `check_database_health` / `run_diagnostics` / `get_container_metrics` / 容器与 ES 日志监控）、
+富途规则交易（`add_futu_rule` / `run_futu_rules` / `place_futu_order`，默认模拟盘，成交或信号走 WxPusher/飞书）等。
 
 ---
 
